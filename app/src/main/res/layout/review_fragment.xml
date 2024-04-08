@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".presentation.review.ReviewFragment" >
+
+    <TextView
+        android:id="@+id/tvMovieTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/roboto_bold"
+        android:textAlignment="center"
+        android:textColor="@color/text"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Иван Васильевич меняет профессию" />
+
+    <RatingBar
+        android:id="@+id/rbRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvMovieTitle" />
+
+    <EditText
+        android:id="@+id/etReviewText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:autofillHints=""
+        android:fontFamily="@font/roboto_light"
+        android:hint="@string/review_hint"
+        android:inputType="text|textMultiLine"
+        android:minHeight="48dp"
+        android:textColor="@color/text"
+        android:textSize="12sp"
+        android:maxLength="500"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rbRating" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSaveReview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        app:cornerRadius="8dp"
+        android:fontFamily="@font/roboto_bold"
+        android:backgroundTint="@color/button_bg"
+        android:text="@string/save_review"
+        android:textSize="14sp"
+        android:textColor="@color/button_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etReviewText" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnDeleteReview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="@string/delete_review"
+        android:textSize="14sp"
+        app:cornerRadius="8dp"
+        android:textColor="@color/button_text"
+        android:backgroundTint="@color/button_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

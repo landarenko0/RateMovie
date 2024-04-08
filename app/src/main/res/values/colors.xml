@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="blue">#0000FF</color>
+    <color name="grey">#808080</color>
+    <color name="text">#FF000000</color>
+    <color name="review_bg">#EAEAEA</color>
+    <color name="poster_gradient_center">#E6FFFFFF</color>
+    <color name="poster_gradient_bottom">#FFFFFFFF</color>
+    <color name="background">#FFFFFFFF</color>
+    <color name="button_bg">#FF000000</color>
+    <color name="button_text">#FFFFFFFF</color>
+    <color name="search_bg">#EAEAEA</color>
+    <color name="search_movie_bg">#EAEAEA</color>
+    <color name="account_email">#7D7D7D</color>
+    <color name="search_text">#80000000</color>
+</resources>

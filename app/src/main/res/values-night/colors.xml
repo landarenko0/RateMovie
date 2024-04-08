@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="text">#FFFFFFFF</color>
+    <color name="review_bg">#303030</color>
+    <color name="poster_gradient_center">#BF000000</color>
+    <color name="poster_gradient_bottom">#FF000000</color>
+    <color name="background">#FF000000</color>
+    <color name="button_bg">#FFFFFFFF</color>
+    <color name="button_text">#FF000000</color>
+    <color name="search_bg">#707070</color>
+    <color name="search_movie_bg">#707070</color>
+    <color name="account_email">#7D7D7D</color>
+    <color name="search_text">#80FFFFFF</color>
+</resources>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none"
+    android:background="@color/background" >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background" >
+
+        <ImageView
+            android:id="@+id/ivMoviePoster"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:scaleType="centerCrop"
+            tools:src="@tools:sample/backgrounds/scenic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/iv_movie_poster_content_description" />
+
+        <View
+            android:id="@+id/vGradient"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:background="@drawable/poster_bottom_gradient"
+            app:layout_constraintBottom_toBottomOf="@+id/ivMoviePoster"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tvMovieTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/roboto_bold"
+            android:textColor="@color/text"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@id/vGradient"
+            app:layout_constraintEnd_toStartOf="@id/ibFavorite"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Иван Васильевич меняет профессию" />
+
+        <ImageButton
+            android:id="@+id/ibFavorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:layout_marginEnd="10dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/ib_favorite_content_description"
+            android:src="@drawable/ic_favorite_24"
+            app:layout_constraintBottom_toBottomOf="@id/tvMovieTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvMovieTitle" />
+
+        <TextView
+            android:id="@+id/tvGenres"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/roboto_bold"
+            android:textSize="14sp"
+            android:textColor="@color/text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivMoviePoster"
+            tools:text="Комедия, фантастика, приключения" />
+
+        <LinearLayout
+            android:id="@+id/ratingContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/tvGenres"
+            app:layout_constraintStart_toStartOf="parent" >
+
+            <RatingBar
+                android:id="@+id/rbRating"
+                style="@style/RatingBarMovieDetailsStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:visibility="gone"
+                tools:numStars="5"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/tvReviewsCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/roboto_bold"
+                android:textColor="@color/text"
+                android:textSize="14sp"
+                android:visibility="gone"
+                tools:text="5 отзывов"
+                tools:visibility="visible" />
+
+            <ImageButton
+                android:id="@+id/ibEditReview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/ib_edit_content_description"
+                android:src="@drawable/ic_add_24"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvAbout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/ratingContainer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/roboto_bold"
+            android:textSize="16sp"
+            android:textColor="@color/text"
+            android:text="@string/description" />
+
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tvAbout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/roboto_light"
+            android:textSize="12sp"
+            android:textColor="@color/text"
+            tools:text="Инженер-изобретатель Тимофеев сконструировал машину времени, которая соединила его квартиру с далеким шестнадцатым веком - точнее, с палатами государя Ивана Грозного. Туда-то и попадают тезка царя пенсионер-общественник Иван Васильевич Бунша и квартирный вор Жорж Милославский.
+
+На их место в двадцатом веке «переселяется» великий государь. Поломка машины приводит ко множеству неожиданных и забавных событий..."/>
+
+        <TextView
+            android:id="@+id/tvReviews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDescription"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/roboto_bold"
+            tools:text="Отзывы:"
+            android:textSize="16sp"
+            android:textColor="@color/text" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvReviews"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tvReviews"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            tools:listitem="@layout/review" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

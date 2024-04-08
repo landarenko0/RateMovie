@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <View
+        android:id="@+id/reviewBackground"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/review_bg"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/tvReview"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/reviewBackground"
+        app:layout_constraintStart_toStartOf="@id/reviewBackground"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        tools:text="username"
+        android:textColor="@color/text"
+        android:fontFamily="@font/roboto_bold"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tvGrade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/tvUsername"
+        app:layout_constraintBottom_toBottomOf="@id/tvUsername"
+        app:layout_constraintStart_toEndOf="@id/tvUsername"
+        android:layout_marginStart="5dp"
+        android:textColor="@color/text"
+        android:fontFamily="@font/roboto_bold"
+        android:textSize="12sp"
+        tools:text="5" />
+
+    <TextView
+        android:id="@+id/tvReview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tvUsername"
+        app:layout_constraintStart_toStartOf="@id/reviewBackground"
+        app:layout_constraintEnd_toEndOf="@id/reviewBackground"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:paddingBottom="10dp"
+        android:textColor="@color/text"
+        android:fontFamily="@font/roboto_light"
+        android:textSize="12sp"
+        tools:text="Лично я не могу себе представить, что этому фильму можно поставить меньше 10 баллов - как минимум 100 баллов. Смотрел его, наверное, раз 15 и каждый раз с таким же интересом как и предыдущий. Фильм, в котором каждое слово без исключения врезается в память. Также как и действия."/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,87 @@
+<resources>
+
+    <string name="app_name">Rate Movie</string>
+
+    <!-- Toast Errors -->
+    <string name="invalid_data_error">Неверный логин или пароль</string>
+    <string name="empty_fields_error">Введите данные во все поля</string>
+    <string name="default_error">Что-то пошло не так</string>
+    <string name="email_collision_error">Пользователь с таким E-mail уже существует</string>
+    <string name="username_collision_error">Пользователь с таким именем уже существует</string>
+    <string name="weak_password_error">Пароль должен содержать минимум 6 символов</string>
+    <string name="invalid_symbols_error">В имени пользователя не должно быть символов: . # $ [ ]</string>
+    <string name="invalid_email_error">Неверно введена почта</string>
+    <!-- Toast Errors -->
+
+    <!-- Login -->
+    <string name="type_login_password">Чтобы войти, введите E-mail и пароль</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Пароль</string>
+    <string name="enter">Войти</string>
+    <string name="no_account">Нет аккаунта? Зарегистрируйтесь!</string>
+    <!-- Login -->
+
+    <!-- Registration -->
+    <string name="registration">Регистрация</string>
+    <string name="register">Зарегистрироваться</string>
+    <string name="username_hint">Имя пользователя</string>
+    <!-- Registration -->
+
+    <!-- Main Screen -->
+    <string name="new_movies">Новинки</string>
+    <!-- Main Screen -->
+
+    <!-- Movie -->
+    <string name="poster_description">Постер фильма</string>
+    <!-- Movie -->
+
+    <!-- Movie Details -->
+    <string name="movie_rating">Рейтинг:</string>
+    <string name="loading">Загрузка…</string>
+    <string name="reviews">Отзывы:</string>
+    <string name="delete_from_favorites">Удалить из избранного</string>
+    <string name="add_to_favorites">Добавить в избранное</string>
+    <string name="create_review">Добавить отзыв</string>
+    <string name="edit_review">Редактировать отзыв</string>
+    <string name="no_reviews">Нет отзывов</string>
+    <string name="description">Описание</string>
+    <string name="reviewsCount">%1$d отзывов</string>
+    <string name="ib_favorite_content_description">Добавить фильм в избранное</string>
+    <string name="ib_edit_content_description">Добавить или редактировать отзыв</string>
+    <string name="iv_movie_poster_content_description">Картинка фильма</string>
+    <!-- Movie Details -->
+    
+    <!-- Review -->
+    <string name="your_review">Ваш отзыв:</string>
+    <string name="review_hint">Опишите свои впечатления</string>
+    <string name="save_review">Сохранить</string>
+    <string name="delete_review">Удалить отзыв</string>
+    <!-- Review -->
+
+    <!-- Bottom Navigation Menu -->
+    <string name="movies_nav_menu">Фильмы</string>
+    <string name="search_nav_menu">Поиск</string>
+    <string name="account_nav_menu">Аккаунт</string>
+    <!-- Bottom Navigation Menu -->
+
+    <!-- Search -->
+    <string name="search_hint">Поиск</string>
+    <!-- Search -->
+
+    <!-- Account -->
+    <string name="liked_films">Вам понравились</string>
+    <string name="user_left_review">Вы оставили отзыв</string>
+    <string name="theme">Тема</string>
+    <string name="light_theme">Светлая</string>
+    <string name="dark_theme">Темная</string>
+    <string name="exit_account">Выйти из аккаунта</string>
+    <string name="unauthorized">Вы не выполнили вход</string>
+    <string name="sign_in">Войти в аккаунт</string>
+    <!-- Account -->
+
+    <!-- Text View Holder -->
+    <string name="enter_movie_title">Введите название фильма в строку поиска</string>
+    <string name="no_search_result">Ничего не найдено</string>
+    <!-- Text View Holder -->
+
+</resources>

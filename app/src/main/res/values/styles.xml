@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ratingBar_style">
+        <item name="colorControlActivated">@color/black</item>
+    </style>
+    
+    <style name="RatingBarMovieDetailsStyle" parent="Widget.AppCompat.RatingBar.Indicator">
+        <item name="android:progressDrawable">@drawable/ratingbar</item>
+        <item name="android:minHeight">12dp</item>
+        <item name="android:maxHeight">12dp</item>
+        <item name="android:numStars">5</item>
+    </style>
+
+    <style name="customRoundedImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="customRoundedSearchMovie" parent="customRoundedImageView" >
+        <item name="cornerSize">4dp</item>
+    </style>
+
+</resources>
