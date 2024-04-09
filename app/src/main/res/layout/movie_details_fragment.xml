@@ -85,16 +85,6 @@
             app:layout_constraintTop_toBottomOf="@id/tvGenres"
             app:layout_constraintStart_toStartOf="parent" >
 
-            <RatingBar
-                android:id="@+id/rbRating"
-                style="@style/RatingBarMovieDetailsStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:visibility="gone"
-                tools:numStars="5"
-                tools:visibility="visible" />
-
             <TextView
                 android:id="@+id/tvReviewsCount"
                 android:layout_width="wrap_content"

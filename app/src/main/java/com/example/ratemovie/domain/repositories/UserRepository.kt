@@ -45,12 +45,4 @@ interface UserRepository {
         userId: String,
         movieId: Int
     )
-
-    suspend fun editReview(
-        oldReview: Review,
-        newReview: Review,
-        userId: String,
-        movieId: Int
-    )
-
 }

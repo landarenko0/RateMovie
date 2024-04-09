@@ -104,13 +104,6 @@ class MovieDetailsFragment : Fragment() {
             }
         }
 
-        viewModel.movieRating.observe(viewLifecycleOwner) { rating ->
-            if (rating != null) {
-                binding.rbRating.rating = rating
-                binding.rbRating.visibility = View.VISIBLE
-            }
-        }
-
         viewModel.userReview.observe(viewLifecycleOwner) { review ->
             if (activityViewModel.user.value != null) {
                 if (review != null) {

@@ -68,7 +68,7 @@ class ReviewFragment : Fragment() {
     private fun setOnClickListener(review: Review?, movie: Movie) {
         binding.btnSaveReview.setOnClickListener {
             // TODO: Показать лоадер
-            viewModel.saveReview(reviewText, grade, review, movie.id)
+            viewModel.saveReview(reviewText, grade, movie.id)
             activityViewModel.addReviewedMovie(movie)
         }
 

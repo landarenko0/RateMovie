@@ -9,7 +9,6 @@ import com.example.ratemovie.data.UserRepositoryImpl
 import com.example.ratemovie.domain.usecases.AddMovieToFavoritesUseCase
 import com.example.ratemovie.domain.usecases.CheckUserLikesMovieUseCase
 import com.example.ratemovie.domain.usecases.DeleteMovieFromFavoritesUseCase
-import com.example.ratemovie.domain.usecases.GetMovieRatingUseCase
 import com.example.ratemovie.domain.usecases.GetMovieReviewsUseCase
 import com.example.ratemovie.domain.usecases.GetUserReviewUseCase
 import com.example.ratemovie.domain.entities.Review
@@ -21,9 +20,6 @@ class MovieDetailsViewModel(private val movieId: Int) : ViewModel() {
     private val _reviews = MutableLiveData<List<Review>>()
     val reviews: LiveData<List<Review>> get() = _reviews
 
-    private val _movieRating = MutableLiveData<Float?>()
-    val movieRating: LiveData<Float?> get() = _movieRating
-
     private val _isFavorite = MutableLiveData<Boolean>()
     val isFavorite: LiveData<Boolean> get() = _isFavorite
 
@@ -34,7 +30,6 @@ class MovieDetailsViewModel(private val movieId: Int) : ViewModel() {
     private val userRepository = UserRepositoryImpl()
 
     private val getMovieReviewsUseCase = GetMovieReviewsUseCase(movieRepository)
-    private val getMovieRatingUseCase = GetMovieRatingUseCase(movieRepository)
     private val checkUserLikesMovieUseCase = CheckUserLikesMovieUseCase(movieRepository)
     private val getUserReviewUseCase = GetUserReviewUseCase(movieRepository)
 
@@ -44,12 +39,6 @@ class MovieDetailsViewModel(private val movieId: Int) : ViewModel() {
     private fun getMovieReviews(movieId: Int) {
         viewModelScope.launch {
             _reviews.value = getMovieReviewsUseCase(movieId)
-        }
-    }
-
-    private fun getMovieRating(movieId: Int) {
-        viewModelScope.launch {
-            _movieRating.value = getMovieRatingUseCase(movieId)
         }
     }
 
@@ -81,7 +70,6 @@ class MovieDetailsViewModel(private val movieId: Int) : ViewModel() {
 
     fun updateData() {
         getMovieReviews(movieId)
-        getMovieRating(movieId)
 
         val userId = FirebaseAuth.getInstance().currentUser?.uid
 

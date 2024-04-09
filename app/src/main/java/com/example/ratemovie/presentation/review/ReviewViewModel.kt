@@ -9,7 +9,6 @@ import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.domain.entities.Review
 import com.example.ratemovie.domain.usecases.AddReviewUseCase
 import com.example.ratemovie.domain.usecases.DeleteReviewUseCase
-import com.example.ratemovie.domain.usecases.EditReviewUseCase
 import com.example.ratemovie.domain.usecases.GetUsernameUseCase
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
@@ -24,29 +23,10 @@ class ReviewViewModel : ViewModel() {
     private val getUsernameUseCase = GetUsernameUseCase(userRepository)
     private val addReviewUseCase = AddReviewUseCase(userRepository)
     private val deleteReviewUseCase = DeleteReviewUseCase(userRepository)
-    private val editReviewUseCase = EditReviewUseCase(userRepository)
-
-    private suspend fun addReview(
-        review: Review,
-        movieId: Int,
-        userId: String
-    ) {
-        addReviewUseCase(review, userId, movieId)
-    }
-
-    private suspend fun editReview(
-        newReview: Review,
-        oldReview: Review,
-        movieId: Int,
-        userId: String
-    ) {
-        editReviewUseCase(oldReview, newReview, userId, movieId)
-    }
 
     fun saveReview(
         reviewText: String,
         grade: Float,
-        oldReview: Review?,
         movieId: Int
     ) {
         viewModelScope.launch {
@@ -55,13 +35,9 @@ class ReviewViewModel : ViewModel() {
 
             val username = getUsernameUseCase(userId)
 
-            val newReview = Review(reviewText, grade, username)
+            val review = Review(reviewText, grade, username)
 
-            if (oldReview == null) {
-                addReview(newReview, movieId, userId)
-            } else {
-                editReview(newReview, oldReview, movieId, userId)
-            }
+            addReviewUseCase(review, userId, movieId)
 
             _shouldCloseFragment.value = Unit
         }

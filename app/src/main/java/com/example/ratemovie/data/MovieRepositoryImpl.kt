@@ -26,17 +26,6 @@ class MovieRepositoryImpl : MovieRepository {
         return reviews.filterNotNull()
     }
 
-    override suspend fun getMovieRating(movieId: Int): Float? {
-        val snapshot = FirebaseDatabase
-            .getInstance()
-            .reference
-            .child("Movies/$movieId/rating")
-            .get()
-            .await()
-
-        return snapshot.getValue(Float::class.java)
-    }
-
     override suspend fun checkUserLikesMovie(userId: String, movieId: Int): Boolean {
         val snapshot = FirebaseDatabase
             .getInstance()
@@ -47,11 +36,7 @@ class MovieRepositoryImpl : MovieRepository {
 
         val likedMovies = snapshot.value as? List<String>
 
-        if (likedMovies != null) {
-            return likedMovies.any { it == movieId.toString() }
-        }
-
-        return false
+        return likedMovies?.any { it == movieId.toString() } ?: false
     }
 
     override suspend fun getUserReview(userId: String, movieId: Int): Review? {

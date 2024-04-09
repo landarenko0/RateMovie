@@ -147,66 +147,15 @@ class UserRepositoryImpl : UserRepository {
     }
 
     override suspend fun addReview(review: Review, userId: String, movieId: Int) {
-        val snapshot = getMovieSnapshot(movieId)
-
-        val oldRating = snapshot.child("rating").getValue(Float::class.java) ?: 0f
-        val reviewsCount = snapshot.child("reviews").childrenCount
-
-        val newRating: Float = calculateRating(oldRating, review.grade, reviewsCount)
-
-        updateMovieRating(newRating, movieId)
-
         addReviewToMovie(review, userId, movieId)
 
         addMovieToUser(userId, movieId)
     }
 
     override suspend fun deleteReview(review: Review, userId: String, movieId: Int) {
-        val snapshot = getMovieSnapshot(movieId)
-
-        if (snapshot.child("reviews").childrenCount == 1L) {
-            deleteMovieData(movieId)
-        } else {
-            val userGrade = review.grade
-            val oldMovieRating = snapshot.child("rating").getValue(Float::class.java) ?: 0f
-            val reviewsCount = snapshot.child("reviews").childrenCount
-
-            val newRating = recalculateRatingWithoutUserGrade(
-                userGrade,
-                oldMovieRating,
-                reviewsCount
-            )
-
-            updateMovieRating(newRating, movieId)
-            deleteUserReview(userId, movieId)
-        }
+        deleteUserReview(userId, movieId)
 
         deleteMovieFromUser(userId, movieId)
-    }
-
-    override suspend fun editReview(
-        oldReview: Review,
-        newReview: Review,
-        userId: String,
-        movieId: Int
-    ) {
-        val snapshot = getMovieSnapshot(movieId)
-
-        val oldUserGrade = oldReview.grade
-        val newUserGrade = newReview.grade
-        val oldMovieRating = snapshot.child("rating").getValue(Float::class.java) ?: 0f
-        val reviewsCount = snapshot.child("reviews").childrenCount
-
-        val newMovieRating = recalculateRating(
-            oldUserGrade,
-            newUserGrade,
-            oldMovieRating,
-            reviewsCount
-        )
-
-        updateMovieRating(newMovieRating, movieId)
-
-        addReviewToMovie(newReview, userId, movieId)
     }
 
     private suspend fun addMovieToUser(userId: String, movieId: Int) {
@@ -249,29 +198,6 @@ class UserRepositoryImpl : UserRepository {
             .await()
     }
 
-    private suspend fun getMovieSnapshot(movieId: Int) =
-        FirebaseDatabase
-            .getInstance()
-            .reference
-            .child("Movies/$movieId")
-            .get()
-            .await()
-
-    private fun calculateRating(oldRating: Float, userGrade: Float, reviewsCount: Long): Float {
-        val rawRating = (oldRating * reviewsCount + userGrade) / (reviewsCount + 1)
-
-        return "%.1f".format(rawRating).replace(',', '.').toFloat()
-    }
-
-    private suspend fun updateMovieRating(rating: Float, movieId: Int) {
-        FirebaseDatabase
-            .getInstance()
-            .reference
-            .child("Movies/$movieId/rating")
-            .setValue(rating)
-            .await()
-    }
-
     private suspend fun addReviewToMovie(review: Review, userId: String, movieId: Int) {
         FirebaseDatabase
             .getInstance()
@@ -279,37 +205,5 @@ class UserRepositoryImpl : UserRepository {
             .child("Movies/$movieId/reviews/$userId")
             .setValue(review)
             .await()
-    }
-
-    private suspend fun deleteMovieData(movieId: Int) {
-        FirebaseDatabase
-            .getInstance()
-            .reference
-            .child("Movies/$movieId")
-            .setValue(null)
-            .await()
-    }
-
-    private fun recalculateRatingWithoutUserGrade(
-        userGrade: Float,
-        oldMovieRating: Float,
-        reviewsCount: Long
-    ): Float {
-        val rawRating = (oldMovieRating * reviewsCount - userGrade) / (reviewsCount - 1)
-
-        return "%.1f".format(rawRating).replace(',', '.').toFloat()
-    }
-
-    private fun recalculateRating(
-        oldUserGrade: Float,
-        newUserGrade: Float,
-        oldMovieRating: Float,
-        reviewsCount: Long
-    ): Float {
-        val difference = newUserGrade - oldUserGrade
-
-        val rawRating = (oldMovieRating * reviewsCount + difference) / reviewsCount
-
-        return "%.1f".format(rawRating).replace(',', '.').toFloat()
     }
 }
