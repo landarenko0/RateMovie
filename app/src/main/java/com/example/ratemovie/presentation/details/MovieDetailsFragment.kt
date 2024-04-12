@@ -19,8 +19,6 @@ import com.example.ratemovie.presentation.adapters.ReviewsAdapter
 
 class MovieDetailsFragment : Fragment() {
 
-    // TODO: Добавление фильма в избранное
-
     private var _binding: MovieDetailsFragmentBinding? = null
     private val binding
         get() = _binding ?: throw RuntimeException("MovieDetailsFragmentBinding was null")
@@ -51,6 +49,7 @@ class MovieDetailsFragment : Fragment() {
         setupMovieInfo(args.movie)
         setupRecyclerView()
         setOnEditButtonClickListener(args.movie)
+        setOnAddToFavoriteButtonClickListener(args.movie.id)
         observeViewModel()
     }
 
@@ -74,6 +73,12 @@ class MovieDetailsFragment : Fragment() {
                 review = viewModel.userReview.value,
                 movie = movie
             )
+        }
+    }
+
+    private fun setOnAddToFavoriteButtonClickListener(movieId: Int) {
+        binding.ibFavorite.setOnClickListener {
+            viewModel.onFavoriteButtonClicked(movieId)
         }
     }
 
@@ -111,6 +116,15 @@ class MovieDetailsFragment : Fragment() {
                 } else {
                     binding.ibEditReview.setImageResource(R.drawable.ic_add_24)
                 }
+            }
+        }
+
+        viewModel.isFavorite.observe(viewLifecycleOwner) { movieIsFavorite ->
+            if (movieIsFavorite) {
+                binding.ibFavorite.setImageResource(R.drawable.ic_favorite_filled_24)
+            }
+            else {
+                binding.ibFavorite.setImageResource(R.drawable.ic_favorite_24)
             }
         }
     }
