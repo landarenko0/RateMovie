@@ -28,4 +28,35 @@ class MainActivityViewModel : ViewModel() {
             user.value = getUserUseCase(userId)
         }
     }
+
+    fun addMovieToFavorites(movie: Movie) {
+        val likedMovies = user.value!!.liked.toMutableList()
+        likedMovies.add(movie.id.toString())
+
+        user.value = user.value?.copy(liked = likedMovies)
+    }
+
+    fun deleteMovieFromFavorites(movie: Movie) {
+        val likedMovies = user.value!!.liked.toMutableList()
+        likedMovies.remove(movie.id.toString())
+
+        user.value = user.value?.copy(liked = likedMovies)
+    }
+
+    fun addReviewedMovie(movie: Movie) {
+        val reviewedMovies = user.value!!.reviewed.toMutableList()
+
+        if (!reviewedMovies.contains(movie.id.toString())) {
+            reviewedMovies.add(movie.id.toString())
+        }
+
+        user.value = user.value?.copy(reviewed = reviewedMovies)
+    }
+
+    fun deleteReviewedMovie(movie: Movie) {
+        val reviewedMovies = user.value!!.reviewed.toMutableList()
+        reviewedMovies.remove(movie.id.toString())
+
+        user.value = user.value?.copy(reviewed = reviewedMovies)
+    }
 }

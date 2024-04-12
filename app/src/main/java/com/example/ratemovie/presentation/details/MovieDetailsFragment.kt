@@ -48,8 +48,7 @@ class MovieDetailsFragment : Fragment() {
 
         setupMovieInfo(args.movie)
         setupRecyclerView()
-        setOnEditButtonClickListener(args.movie)
-        setOnAddToFavoriteButtonClickListener(args.movie.id)
+        setupOnClickListeners(args.movie)
         observeViewModel()
     }
 
@@ -63,23 +62,30 @@ class MovieDetailsFragment : Fragment() {
         }
     }
 
-    private fun setupRecyclerView() {
-        binding.rvReviews.adapter = reviewsAdapter
-    }
-
-    private fun setOnEditButtonClickListener(movie: Movie) {
+    private fun setupOnClickListeners(movie: Movie) {
         binding.ibEditReview.setOnClickListener {
             showReviewFragment(
                 review = viewModel.userReview.value,
                 movie = movie
             )
         }
+
+        binding.ibFavorite.setOnClickListener {
+            val userLikesMovie = viewModel.isFavorite.value ?: return@setOnClickListener
+
+            if (userLikesMovie) {
+                viewModel.deleteFromFavorites(movie.id)
+                activityViewModel.deleteMovieFromFavorites(movie)
+            }
+            else {
+                viewModel.addToFavorites(movie.id)
+                activityViewModel.addMovieToFavorites(movie)
+            }
+        }
     }
 
-    private fun setOnAddToFavoriteButtonClickListener(movieId: Int) {
-        binding.ibFavorite.setOnClickListener {
-            viewModel.onFavoriteButtonClicked(movieId)
-        }
+    private fun setupRecyclerView() {
+        binding.rvReviews.adapter = reviewsAdapter
     }
 
     private fun observeViewModel() {

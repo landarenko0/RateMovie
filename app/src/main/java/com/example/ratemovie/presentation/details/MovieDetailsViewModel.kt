@@ -54,25 +54,18 @@ class MovieDetailsViewModel(private val movieId: Int) : ViewModel() {
         }
     }
 
-    fun onFavoriteButtonClicked(movieId: Int) {
+    fun addToFavorites(movieId: Int) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
-        if (isFavorite.value != null && isFavorite.value == true) {
-            deleteFromFavorites(userId, movieId)
-        }
-        else {
-            addToFavorites(userId, movieId)
-        }
-    }
-
-    private fun addToFavorites(userId: String, movieId: Int) {
         viewModelScope.launch {
             addMovieToFavoritesUseCase(userId, movieId)
             _isFavorite.value = true
         }
     }
 
-    private fun deleteFromFavorites(userId: String, movieId: Int) {
+    fun deleteFromFavorites(movieId: Int) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+
         viewModelScope.launch {
             deleteMovieFromFavoritesUseCase(userId, movieId)
             _isFavorite.value = false

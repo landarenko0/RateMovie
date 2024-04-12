@@ -69,12 +69,14 @@ class ReviewFragment : Fragment() {
         binding.btnSaveReview.setOnClickListener {
             // TODO: Показать лоадер
             viewModel.saveReview(reviewText, grade, movie.id)
+            activityViewModel.addReviewedMovie(movie)
         }
 
         if (review != null) {
             binding.btnDeleteReview.setOnClickListener {
                 // TODO: Показать лоадер
                 viewModel.deleteReview(review, movie)
+                activityViewModel.deleteReviewedMovie(movie)
             }
         }
     }
