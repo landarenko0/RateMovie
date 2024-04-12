@@ -92,8 +92,8 @@ class AccountFragment : Fragment() {
                     tvUsername.text = user.username
                     tvEmail.text = user.email
 
-                    viewModel.getUserLikedMovies(user.likedMovies)
-                    viewModel.getUserReviewedMovies(user.reviewedMovies)
+                    viewModel.getUserLikedMovies(user.liked)
+                    viewModel.getUserReviewedMovies(user.reviewed)
 
                     btnSignOut.visibility = View.VISIBLE
                     btnSignIn.visibility = View.GONE

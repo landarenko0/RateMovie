@@ -3,8 +3,8 @@ package com.example.ratemovie.domain.entities
 data class User(
     val username: String,
     val email: String,
-    val likedMovies: List<String>,
-    val reviewedMovies: List<String>
+    val liked: List<String>,
+    val reviewed: List<String>
 )
 {
     constructor() : this("", "", emptyList(), emptyList())

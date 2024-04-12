@@ -162,12 +162,12 @@ class UserRepositoryImpl : UserRepository {
         val database = FirebaseDatabase.getInstance().reference
 
         val snapshot = database
-            .child("Users/$userId/reviewedMovies")
+            .child("Users/$userId/reviewed")
             .get()
             .await()
 
         database
-            .child("Users/$userId/reviewedMovies/${snapshot.childrenCount}")
+            .child("Users/$userId/reviewed/${snapshot.childrenCount}")
             .setValue(movieId.toString())
             .await()
     }
@@ -185,7 +185,7 @@ class UserRepositoryImpl : UserRepository {
         val database = FirebaseDatabase.getInstance().reference
 
         val moviesIds = database
-            .child("Users/$userId/reviewedMovies")
+            .child("Users/$userId/reviewed")
             .get()
             .await()
             .value as MutableList<String>
@@ -193,7 +193,7 @@ class UserRepositoryImpl : UserRepository {
         moviesIds.remove(movieId.toString())
 
         database
-            .child("Users/$userId/reviewedMovies")
+            .child("Users/$userId/reviewed")
             .setValue(moviesIds)
             .await()
     }
