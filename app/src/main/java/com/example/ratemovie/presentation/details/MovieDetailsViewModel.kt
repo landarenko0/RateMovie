@@ -3,6 +3,7 @@ package com.example.ratemovie.presentation.details
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.ratemovie.data.MovieRepositoryImpl
 import com.example.ratemovie.data.UserRepositoryImpl
@@ -25,6 +26,9 @@ class MovieDetailsViewModel(private val movieId: Int) : ViewModel() {
 
     private val _userReview = MutableLiveData<Review?>()
     val userReview: LiveData<Review?> get() = _userReview
+
+    private val _shouldShowLoader = MutableLiveData(false)
+    val shouldShowLoader: LiveData<Boolean> get() = _shouldShowLoader
 
     private val movieRepository = MovieRepositoryImpl()
     private val userRepository = UserRepositoryImpl()
@@ -55,20 +59,24 @@ class MovieDetailsViewModel(private val movieId: Int) : ViewModel() {
     }
 
     fun addToFavorites(movieId: Int) {
+        _shouldShowLoader.value = true
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
         viewModelScope.launch {
             addMovieToFavoritesUseCase(userId, movieId)
             _isFavorite.value = true
+            _shouldShowLoader.value = false
         }
     }
 
     fun deleteFromFavorites(movieId: Int) {
+        _shouldShowLoader.value = true
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
         viewModelScope.launch {
             deleteMovieFromFavoritesUseCase(userId, movieId)
             _isFavorite.value = false
+            _shouldShowLoader.value = false
         }
     }
 

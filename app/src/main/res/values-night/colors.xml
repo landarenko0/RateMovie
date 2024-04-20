@@ -11,4 +11,5 @@
     <color name="search_movie_bg">#707070</color>
     <color name="account_email">#7D7D7D</color>
     <color name="search_text">#80FFFFFF</color>
+    <color name="loader">#FFFFFFFF</color>
 </resources>

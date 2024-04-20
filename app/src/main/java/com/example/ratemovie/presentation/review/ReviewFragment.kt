@@ -14,6 +14,7 @@ import com.example.ratemovie.R
 import com.example.ratemovie.databinding.ReviewFragmentBinding
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.domain.entities.Review
+import com.example.ratemovie.presentation.LoaderDialogFragment
 import com.example.ratemovie.presentation.details.MovieDetailsViewModel
 
 class ReviewFragment : Fragment() {
@@ -28,6 +29,8 @@ class ReviewFragment : Fragment() {
 
     private val reviewText get() = binding.etReviewText.text.toString()
     private val grade get() = binding.rbRating.rating
+
+    private val loader = LoaderDialogFragment()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,14 +70,12 @@ class ReviewFragment : Fragment() {
 
     private fun setOnClickListener(review: Review?, movie: Movie) {
         binding.btnSaveReview.setOnClickListener {
-            // TODO: Показать лоадер
             viewModel.saveReview(reviewText, grade, movie.id)
             activityViewModel.addReviewedMovie(movie)
         }
 
         if (review != null) {
             binding.btnDeleteReview.setOnClickListener {
-                // TODO: Показать лоадер
                 viewModel.deleteReview(review, movie)
                 activityViewModel.deleteReviewedMovie(movie)
             }
@@ -84,9 +85,26 @@ class ReviewFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.shouldCloseFragment.observe(viewLifecycleOwner) { closeFragment() }
 
+        viewModel.shouldShowLoader.observe(viewLifecycleOwner) { showLoader ->
+            if (showLoader) {
+                showLoader()
+            }
+            else {
+                closeLoader()
+            }
+        }
+
         activityViewModel.user.observe(viewLifecycleOwner) { user ->
             if (user == null) closeFragment()
         }
+    }
+
+    private fun showLoader() {
+        loader.show(childFragmentManager, null)
+    }
+
+    private fun closeLoader() {
+        if (loader.isAdded) loader.dismiss()
     }
 
     private fun closeFragment() = findNavController().navigateUp()

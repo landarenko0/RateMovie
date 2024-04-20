@@ -15,9 +15,12 @@ import com.example.ratemovie.R
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.domain.entities.Review
 import com.example.ratemovie.databinding.MovieDetailsFragmentBinding
+import com.example.ratemovie.presentation.LoaderDialogFragment
 import com.example.ratemovie.presentation.adapters.ReviewsAdapter
 
 class MovieDetailsFragment : Fragment() {
+
+    // TODO: Добавить лоадер при запуске фрагмента
 
     private var _binding: MovieDetailsFragmentBinding? = null
     private val binding
@@ -31,6 +34,8 @@ class MovieDetailsFragment : Fragment() {
     private val activityViewModel: MainActivityViewModel by activityViewModels()
 
     private val reviewsAdapter = ReviewsAdapter()
+
+    private val loader = LoaderDialogFragment()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -133,6 +138,23 @@ class MovieDetailsFragment : Fragment() {
                 binding.ibFavorite.setImageResource(R.drawable.ic_favorite_24)
             }
         }
+
+        viewModel.shouldShowLoader.observe(viewLifecycleOwner) { showLoader ->
+            if (showLoader) {
+                showLoader()
+            }
+            else {
+                closeLoader()
+            }
+        }
+    }
+
+    private fun showLoader() {
+        loader.show(childFragmentManager, null)
+    }
+
+    private fun closeLoader() {
+        if (loader.isAdded) loader.dismiss()
     }
 
     private fun showReviewFragment(review: Review?, movie: Movie) {
