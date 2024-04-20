@@ -108,14 +108,11 @@ class MovieDetailsFragment : Fragment() {
             with(binding) {
                 if (reviews.isEmpty()) {
                     tvReviewsCount.text = getString(R.string.no_reviews)
-                    tvReviewsCount.visibility = View.VISIBLE
                     tvReviews.visibility = View.GONE
-                    rvReviews.visibility = View.GONE
                 } else {
-                    tvReviews.text = getString(R.string.reviews)
                     reviewsAdapter.submitList(reviews)
                     tvReviewsCount.text = getString(R.string.reviewsCount, reviews.size)
-                    tvReviewsCount.visibility = View.VISIBLE
+                    tvReviews.visibility = View.VISIBLE
                 }
             }
         }
