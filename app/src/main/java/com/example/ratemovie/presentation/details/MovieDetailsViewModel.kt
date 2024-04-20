@@ -3,7 +3,6 @@ package com.example.ratemovie.presentation.details
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.ratemovie.data.MovieRepositoryImpl
 import com.example.ratemovie.data.UserRepositoryImpl
@@ -40,22 +39,16 @@ class MovieDetailsViewModel(private val movieId: Int) : ViewModel() {
     private val addMovieToFavoritesUseCase = AddMovieToFavoritesUseCase(userRepository)
     private val deleteMovieFromFavoritesUseCase = DeleteMovieFromFavoritesUseCase(userRepository)
 
-    private fun getMovieReviews(movieId: Int) {
-        viewModelScope.launch {
-            _reviews.value = getMovieReviewsUseCase(movieId)
-        }
+    private suspend fun getMovieReviews(movieId: Int) {
+        _reviews.value = getMovieReviewsUseCase(movieId)
     }
 
-    private fun checkUserLikesMovie(userId: String, movieId: Int) {
-        viewModelScope.launch {
-            _isFavorite.value = checkUserLikesMovieUseCase(userId, movieId)
-        }
+    private suspend fun checkUserLikesMovie(userId: String, movieId: Int) {
+        _isFavorite.value = checkUserLikesMovieUseCase(userId, movieId)
     }
 
-    private fun getUserReview(userId: String, movieId: Int) {
-        viewModelScope.launch {
-            _userReview.value = getUserReviewUseCase(userId, movieId)
-        }
+    private suspend fun getUserReview(userId: String, movieId: Int) {
+        _userReview.value = getUserReviewUseCase(userId, movieId)
     }
 
     fun addToFavorites(movieId: Int) {
@@ -81,13 +74,19 @@ class MovieDetailsViewModel(private val movieId: Int) : ViewModel() {
     }
 
     fun updateData() {
-        getMovieReviews(movieId)
+        viewModelScope.launch {
+            _shouldShowLoader.value = true
 
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
+            getMovieReviews(movieId)
 
-        if (userId != null) {
-            checkUserLikesMovie(userId, movieId)
-            getUserReview(userId, movieId)
+            val userId = FirebaseAuth.getInstance().currentUser?.uid
+
+            if (userId != null) {
+                checkUserLikesMovie(userId, movieId)
+                getUserReview(userId, movieId)
+            }
+
+            _shouldShowLoader.value = false
         }
     }
 }
