@@ -1,4 +1,4 @@
-package com.example.ratemovie.domain.utils
+package com.example.ratemovie.domain.retrofit
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
