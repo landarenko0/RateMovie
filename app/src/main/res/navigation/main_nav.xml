@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_movies"
-        android:name="com.example.ratemovie.presentation.main.MoviesListFragment"
+        android:name="com.example.ratemovie.presentation.movieslist.MoviesListFragment"
         android:label="movies_list_fragment"
         tools:layout="@layout/movies_list_fragment" >
         <action

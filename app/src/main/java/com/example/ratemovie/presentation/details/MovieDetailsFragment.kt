@@ -10,12 +10,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import coil.load
-import com.example.ratemovie.presentation.MainActivityViewModel
+import com.example.ratemovie.presentation.activity.MainActivityViewModel
 import com.example.ratemovie.R
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.domain.entities.Review
 import com.example.ratemovie.databinding.MovieDetailsFragmentBinding
-import com.example.ratemovie.presentation.LoaderDialogFragment
+import com.example.ratemovie.presentation.loader.LoaderDialogFragment
 import com.example.ratemovie.presentation.adapters.ReviewsAdapter
 
 class MovieDetailsFragment : Fragment() {
