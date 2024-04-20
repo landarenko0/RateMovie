@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.ratemovie.data.MoviesListRepositoryImpl
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.domain.usecases.SearchMoviesByNameUseCase
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SearchViewModel : ViewModel() {
@@ -18,9 +20,22 @@ class SearchViewModel : ViewModel() {
 
     private val searchMoviesByNameUseCase = SearchMoviesByNameUseCase(repository)
 
-    fun searchMoviesByKeywords(name: String) {
-        viewModelScope.launch {
-            _movies.value = searchMoviesByNameUseCase(name)
+    private var searchJob: Job? = null
+
+    private suspend fun searchMoviesByKeywords(name: String) {
+        _movies.value = searchMoviesByNameUseCase(name)
+    }
+
+    fun onSearchTextChanged(keywords: String) {
+        searchJob?.cancel()
+
+        searchJob = viewModelScope.launch {
+            delay(SEARCH_DELAY_MS)
+            searchMoviesByKeywords(keywords)
         }
+    }
+
+    companion object {
+        private const val SEARCH_DELAY_MS = 750L
     }
 }

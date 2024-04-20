@@ -6,16 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.example.ratemovie.R
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.databinding.SearchFragmentBinding
 import com.example.ratemovie.presentation.adapters.SearchMoviesAdapter
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class SearchFragment : Fragment() {
 
@@ -26,8 +22,6 @@ class SearchFragment : Fragment() {
     private val viewModel: SearchViewModel by navGraphViewModels(R.id.navigation_search)
 
     private val moviesAdapter = SearchMoviesAdapter()
-
-    private var searchJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +35,8 @@ class SearchFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         setupRecyclerView()
         setOnQueryTextListener()
         observeViewModel()
@@ -53,24 +49,21 @@ class SearchFragment : Fragment() {
     }
 
     private fun setOnQueryTextListener() {
-        // TODO: Показывать лоадер при загрузке
         binding.svSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(keywords: String): Boolean = false
 
             override fun onQueryTextChange(keywords: String?): Boolean {
-                searchJob?.cancel()
-
                 if (keywords.isNullOrBlank()) {
                     moviesAdapter.submitList(emptyList())
-                    binding.tvEmptyMoviesList.text = getText(R.string.enter_movie_title)
-                    binding.tvEmptyMoviesList.visibility = View.VISIBLE
+
+                    with(binding) {
+                        tvEmptyMoviesList.text = getText(R.string.enter_movie_title)
+                        tvEmptyMoviesList.visibility = View.VISIBLE
+                    }
                     return true
                 }
 
-                searchJob = lifecycleScope.launch {
-                    delay(SEARCH_DELAY_MS)
-                    viewModel.searchMoviesByKeywords(keywords)
-                }
+                viewModel.onSearchTextChanged(keywords)
 
                 return true
             }
@@ -82,7 +75,8 @@ class SearchFragment : Fragment() {
         viewModel.movies.observe(viewLifecycleOwner) { movies ->
             if (movies.isNotEmpty()) {
                 binding.tvEmptyMoviesList.visibility = View.GONE
-            } else {
+            }
+            else {
                 binding.tvEmptyMoviesList.visibility = View.VISIBLE
                 binding.tvEmptyMoviesList.text = getText(R.string.no_search_result)
             }
@@ -100,9 +94,5 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        private const val SEARCH_DELAY_MS = 750L
     }
 }
