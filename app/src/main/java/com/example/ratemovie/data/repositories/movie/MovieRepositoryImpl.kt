@@ -14,15 +14,18 @@ class MovieRepositoryImpl : MovieRepository {
             .get()
             .await()
 
-        val reviews = mutableListOf<Review?>()
+        val reviews = mutableListOf<Review>()
 
         snapshot
             .children
             .forEach {
-                reviews.add(it.getValue(Review::class.java))
+                reviews.add(
+                    it.getValue(Review::class.java)
+                        ?: throw RuntimeException("Полученный объект не является отзывом")
+                )
             }
 
-        return reviews.filterNotNull()
+        return reviews
     }
 
     override suspend fun checkUserLikesMovie(userId: String, movieId: Int): Boolean {
