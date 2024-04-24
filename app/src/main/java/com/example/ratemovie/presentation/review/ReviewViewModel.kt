@@ -7,9 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.ratemovie.data.repositories.user.UserRepositoryImpl
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.domain.entities.Review
-import com.example.ratemovie.data.usecases.AddReviewUseCase
-import com.example.ratemovie.data.usecases.DeleteReviewUseCase
-import com.example.ratemovie.data.usecases.GetUsernameUseCase
+import com.example.ratemovie.domain.usecases.AddReviewUseCase
+import com.example.ratemovie.domain.usecases.DeleteReviewUseCase
+import com.example.ratemovie.domain.usecases.GetUsernameUseCase
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 

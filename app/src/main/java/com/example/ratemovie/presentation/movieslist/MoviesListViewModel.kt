@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ratemovie.data.repositories.movieslist.MoviesListRepositoryImpl
-import com.example.ratemovie.data.usecases.GetNewMoviesListUseCase
+import com.example.ratemovie.domain.usecases.GetNewMoviesListUseCase
 import com.example.ratemovie.domain.entities.Movie
 import kotlinx.coroutines.launch
 

@@ -1,4 +1,4 @@
-package com.example.ratemovie.data.usecases
+package com.example.ratemovie.domain.usecases
 
 import com.example.ratemovie.data.repositories.movie.MovieRepository
 

@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ratemovie.data.repositories.user.UserRepositoryImpl
-import com.example.ratemovie.data.usecases.SignUpUseCase
+import com.example.ratemovie.domain.usecases.SignUpUseCase
 import com.example.ratemovie.domain.entities.RegistrationResult
 import kotlinx.coroutines.launch
 

@@ -6,11 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ratemovie.data.repositories.movie.MovieRepositoryImpl
 import com.example.ratemovie.data.repositories.user.UserRepositoryImpl
-import com.example.ratemovie.data.usecases.AddMovieToFavoritesUseCase
-import com.example.ratemovie.data.usecases.CheckUserLikesMovieUseCase
-import com.example.ratemovie.data.usecases.DeleteMovieFromFavoritesUseCase
-import com.example.ratemovie.data.usecases.GetMovieReviewsUseCase
-import com.example.ratemovie.data.usecases.GetUserReviewUseCase
+import com.example.ratemovie.domain.usecases.AddMovieToFavoritesUseCase
+import com.example.ratemovie.domain.usecases.CheckUserLikesMovieUseCase
+import com.example.ratemovie.domain.usecases.DeleteMovieFromFavoritesUseCase
+import com.example.ratemovie.domain.usecases.GetMovieReviewsUseCase
+import com.example.ratemovie.domain.usecases.GetUserReviewUseCase
 import com.example.ratemovie.domain.entities.Review
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch

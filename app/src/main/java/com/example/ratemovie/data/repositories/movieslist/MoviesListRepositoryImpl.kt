@@ -2,7 +2,7 @@ package com.example.ratemovie.data.repositories.movieslist
 
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.domain.api.Api
-import com.example.ratemovie.data.services.MoviesApiService
+import com.example.ratemovie.domain.services.MoviesApiService
 import com.example.ratemovie.domain.retrofit.RetrofitBuilder
 
 class MoviesListRepositoryImpl : MoviesListRepository {

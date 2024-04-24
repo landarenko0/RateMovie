@@ -1,4 +1,4 @@
-package com.example.ratemovie.data.services
+package com.example.ratemovie.domain.services
 
 import com.example.ratemovie.domain.api.Api
 import com.example.ratemovie.domain.entities.ApiResponse
