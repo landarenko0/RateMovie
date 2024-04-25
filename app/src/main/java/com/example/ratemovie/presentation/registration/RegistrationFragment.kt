@@ -13,6 +13,7 @@ import com.example.ratemovie.presentation.activity.MainActivityViewModel
 import com.example.ratemovie.R
 import com.example.ratemovie.databinding.RegistrationFragmentBinding
 import com.example.ratemovie.domain.entities.RegistrationResult
+import com.example.ratemovie.presentation.loader.LoaderDialogFragment
 
 class RegistrationFragment : Fragment() {
 
@@ -26,6 +27,8 @@ class RegistrationFragment : Fragment() {
     private val username get() = binding.etUsername.text.toString()
     private val email get() = binding.etEmail.text.toString()
     private val password get() = binding.etPassword.text.toString()
+
+    private val loader = LoaderDialogFragment()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,8 +57,6 @@ class RegistrationFragment : Fragment() {
             when (result) {
                 is RegistrationResult.Success -> {
                     activityViewModel.user.value = result.user
-
-                    closeFragment()
                 }
 
                 RegistrationResult.Error.EmailCollision -> showMessage(R.string.email_collision_error)
@@ -67,6 +68,20 @@ class RegistrationFragment : Fragment() {
                 RegistrationResult.Error.Default -> showMessage(R.string.default_error)
             }
         }
+
+        viewModel.shouldShowLoader.observe(viewLifecycleOwner) { showLoader ->
+            if (showLoader) showLoader() else closeLoader()
+        }
+
+        viewModel.shouldCloseFragment.observe(viewLifecycleOwner) { closeFragment() }
+    }
+
+    private fun showLoader() {
+        loader.show(childFragmentManager, null)
+    }
+
+    private fun closeLoader() {
+        if (loader.isAdded) loader.dismiss()
     }
 
     private fun showMessage(resId: Int) = Toast.makeText(context, resId, Toast.LENGTH_SHORT).show()

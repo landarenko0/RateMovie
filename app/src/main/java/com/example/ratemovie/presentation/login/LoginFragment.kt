@@ -13,6 +13,7 @@ import com.example.ratemovie.presentation.activity.MainActivityViewModel
 import com.example.ratemovie.R
 import com.example.ratemovie.databinding.LoginFragmentBinding
 import com.example.ratemovie.domain.entities.LoginResult
+import com.example.ratemovie.presentation.loader.LoaderDialogFragment
 
 class LoginFragment : Fragment() {
 
@@ -25,6 +26,8 @@ class LoginFragment : Fragment() {
 
     private val email get() = binding.etEmail.text.toString()
     private val password get() = binding.etPassword.text.toString()
+
+    private val loader = LoaderDialogFragment()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,7 +50,6 @@ class LoginFragment : Fragment() {
             when (result) {
                 is LoginResult.Success -> {
                     activityViewModel.user.value = result.user
-                    closeFragment()
                 }
 
                 LoginResult.Error.EmptyFields -> showMessage(R.string.empty_fields_error)
@@ -55,6 +57,20 @@ class LoginFragment : Fragment() {
                 LoginResult.Error.Default -> showMessage(R.string.default_error)
             }
         }
+
+        viewModel.shouldShowLoader.observe(viewLifecycleOwner) { showLoader ->
+            if (showLoader) showLoader() else closeLoader()
+        }
+
+        viewModel.shouldCloseFragment.observe(viewLifecycleOwner) { closeFragment() }
+    }
+
+    private fun showLoader() {
+        loader.show(childFragmentManager, null)
+    }
+
+    private fun closeLoader() {
+        if (loader.isAdded) loader.dismiss()
     }
 
     private fun setOnClickListeners() {

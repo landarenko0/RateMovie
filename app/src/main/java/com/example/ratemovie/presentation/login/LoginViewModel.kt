@@ -14,13 +14,27 @@ class LoginViewModel : ViewModel() {
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
+    private val _shouldShowLoader = MutableLiveData<Boolean>()
+    val shouldShowLoader: LiveData<Boolean> = _shouldShowLoader
+
+    private val _shouldCloseFragment = MutableLiveData<Unit>()
+    val shouldCloseFragment: LiveData<Unit> = _shouldCloseFragment
+
     private val userRepository = UserRepositoryImpl()
 
     private val signInUseCase = SignInUseCase(userRepository)
 
     fun signIn(email: String, password: String) {
         viewModelScope.launch {
-            _loginResult.value = signInUseCase(email, password)
+            _shouldShowLoader.value = true
+
+            val result = signInUseCase(email, password)
+
+            _loginResult.value = result
+
+            _shouldShowLoader.value = false
+
+            if (result is LoginResult.Success) _shouldCloseFragment.value = Unit
         }
     }
 }
