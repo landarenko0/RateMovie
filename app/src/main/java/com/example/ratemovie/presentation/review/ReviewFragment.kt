@@ -28,7 +28,7 @@ class ReviewFragment : Fragment() {
     private val activityViewModel: MainActivityViewModel by activityViewModels()
 
     private val reviewText get() = binding.etReviewText.text.toString()
-    private val grade get() = binding.rbRating.rating
+    private val grade get() = binding.rbRating.rating.toInt()
 
     private val loader = LoaderDialogFragment()
 
@@ -59,7 +59,7 @@ class ReviewFragment : Fragment() {
             etReviewText.setText(review?.text)
 
             if (review != null) {
-                rbRating.rating = review.grade
+                rbRating.rating = review.grade.toFloat()
             } else {
                 btnDeleteReview.visibility = View.GONE
             }

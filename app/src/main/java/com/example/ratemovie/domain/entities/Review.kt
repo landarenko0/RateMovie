@@ -8,8 +8,8 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Review(
     val text: String,
-    val grade: Float,
+    val grade: Int,
     val username: String,
 ) : Parcelable {
-    constructor() : this("", 0f, "")
+    constructor() : this("", 0, "")
 }

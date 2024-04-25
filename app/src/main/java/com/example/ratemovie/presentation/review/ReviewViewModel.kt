@@ -29,7 +29,7 @@ class ReviewViewModel : ViewModel() {
 
     fun saveReview(
         reviewText: String,
-        grade: Float,
+        grade: Int,
         movieId: Int
     ) {
         _shouldShowLoader.value = true
