@@ -1,85 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav"
-    app:startDestination="@id/navigation_movies" >
+    app:startDestination="@id/navigation_movies">
 
-    <fragment
-        android:id="@+id/navigation_movies"
-        android:name="com.example.ratemovie.presentation.movieslist.MoviesListFragment"
-        android:label="movies_list_fragment"
-        tools:layout="@layout/movies_list_fragment" >
-        <action
-            android:id="@+id/action_moviesListFragment_to_movieDetailsFragment"
-            app:destination="@id/movieDetailsFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/movieDetailsFragment"
-        android:name="com.example.ratemovie.presentation.details.MovieDetailsFragment"
-        android:label="movie_details_fragment"
-        tools:layout="@layout/movie_details_fragment" >
-        <action
-            android:id="@+id/action_movieDetailsFragment_to_reviewFragment"
-            app:destination="@id/reviewFragment" />
-        <argument
-            android:name="movie"
-            app:argType="com.example.ratemovie.domain.entities.Movie" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/reviewFragment"
-        android:name="com.example.ratemovie.presentation.review.ReviewFragment"
-        android:label="review_fragment"
-        tools:layout="@layout/review_fragment" >
-        <argument
-            android:name="review"
-            app:argType="com.example.ratemovie.domain.entities.Review"
-            app:nullable="true"
-            android:defaultValue="@null" />
-        <argument
-            android:name="movie"
-            app:argType="com.example.ratemovie.domain.entities.Movie" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/navigation_search"
-        android:name="com.example.ratemovie.presentation.search.SearchFragment"
-        android:label="search_fragment"
-        tools:layout="@layout/search_fragment" >
-        <action
-            android:id="@+id/action_navigation_search_to_movieDetailsFragment"
-            app:destination="@id/movieDetailsFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/navigation_account"
-        android:name="com.example.ratemovie.presentation.account.AccountFragment"
-        android:label="account_fragment"
-        tools:layout="@layout/account_fragment" >
-        <action
-            android:id="@+id/action_navigation_account_to_movieDetailsFragment"
-            app:destination="@id/movieDetailsFragment" />
-        <action
-            android:id="@+id/action_navigation_account_to_loginFragment"
-            app:destination="@id/loginFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.example.ratemovie.presentation.login.LoginFragment"
-        android:label="login_fragment"
-        tools:layout="@layout/login_fragment" >
-        <action
-            android:id="@+id/action_loginFragment_to_registrationFragment"
-            app:destination="@id/registrationFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/registrationFragment"
-        android:name="com.example.ratemovie.presentation.registration.RegistrationFragment"
-        android:label="registration_fragment"
-        tools:layout="@layout/registration_fragment" />
+    <include app:graph="@navigation/navigation_movies" />
+    <include app:graph="@navigation/navigation_search" />
+    <include app:graph="@navigation/navigation_account" />
 
 </navigation>

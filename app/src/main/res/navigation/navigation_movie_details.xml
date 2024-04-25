@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_movie_details"
+    app:startDestination="@id/movieDetailsFragment">
+
+    <fragment
+        android:id="@+id/movieDetailsFragment"
+        android:name="com.example.ratemovie.presentation.details.MovieDetailsFragment"
+        android:label="MovieDetailsFragment" >
+        <action
+            android:id="@+id/action_movieDetailsFragment_to_reviewFragment"
+            app:destination="@id/reviewFragment" />
+
+        <argument
+            android:name="movie"
+            app:argType="com.example.ratemovie.domain.entities.Movie" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/reviewFragment"
+        android:name="com.example.ratemovie.presentation.review.ReviewFragment"
+        android:label="review_fragment"
+        tools:layout="@layout/review_fragment" >
+
+        <argument
+            android:name="review"
+            app:argType="com.example.ratemovie.domain.entities.Review"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="movie"
+            app:argType="com.example.ratemovie.domain.entities.Movie" />
+    </fragment>
+
+</navigation>

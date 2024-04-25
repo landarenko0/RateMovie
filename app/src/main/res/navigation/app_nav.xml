@@ -8,4 +8,5 @@
         android:id="@+id/mainFragment"
         android:name="com.example.ratemovie.presentation.main.MainFragment"
         android:label="MainFragment" />
+
 </navigation>
