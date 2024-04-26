@@ -51,6 +51,7 @@ class MoviesListFragment : Fragment() {
     }
 
     private fun showMovieDetailsFragment(movie: Movie) {
+        //val action = MoviesListFragmentDirections.actionNavigationMoviesToNavMovieDetails()
         val action =
             MoviesListFragmentDirections.actionMoviesListFragmentToMovieDetailsFragment(movie)
 
