@@ -4,6 +4,7 @@ import com.example.ratemovie.domain.entities.User
 import com.example.ratemovie.domain.entities.LoginResult
 import com.example.ratemovie.domain.entities.RegistrationResult
 import com.example.ratemovie.domain.entities.Review
+import com.example.ratemovie.domain.utils.Globals
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
@@ -67,6 +68,7 @@ class UserRepositoryImpl : UserRepository {
 
     override fun signOut() {
         FirebaseAuth.getInstance().signOut()
+        Globals.User = null
     }
 
     override suspend fun signUp(

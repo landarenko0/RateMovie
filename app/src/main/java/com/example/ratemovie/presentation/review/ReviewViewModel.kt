@@ -5,12 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ratemovie.data.repositories.user.UserRepositoryImpl
-import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.domain.entities.Review
 import com.example.ratemovie.domain.usecases.AddReviewUseCase
 import com.example.ratemovie.domain.usecases.DeleteReviewUseCase
 import com.example.ratemovie.domain.usecases.GetUsernameUseCase
-import com.google.firebase.auth.FirebaseAuth
+import com.example.ratemovie.domain.utils.Globals
 import kotlinx.coroutines.launch
 
 class ReviewViewModel : ViewModel() {
@@ -34,29 +33,31 @@ class ReviewViewModel : ViewModel() {
     ) {
         _shouldShowLoader.value = true
 
-        viewModelScope.launch {
-            val userId = FirebaseAuth.getInstance().currentUser?.uid
-                ?: throw RuntimeException("User was null while adding review")
+        val userId = Globals.User?.id ?: return
 
+        viewModelScope.launch {
             val username = getUsernameUseCase(userId)
 
             val review = Review(reviewText, grade, username)
 
             addReviewUseCase(review, userId, movieId)
 
+            Globals.User?.addMovieToReviewed(movieId.toString())
+
             _shouldShowLoader.value = false
             _shouldCloseFragment.value = Unit
         }
     }
 
-    fun deleteReview(review: Review, movie: Movie) {
+    fun deleteReview(review: Review, movieId: Int) {
         _shouldShowLoader.value = true
 
-        viewModelScope.launch {
-            val userId = FirebaseAuth.getInstance().currentUser?.uid
-                ?: throw RuntimeException("User was null while deleting review")
+        val userId = Globals.User?.id ?: return
 
-            deleteReviewUseCase(review, userId, movie.id)
+        viewModelScope.launch {
+            deleteReviewUseCase(review, userId, movieId)
+
+            Globals.User?.deleteMovieFromReviewed(movieId.toString())
 
             _shouldShowLoader.value = false
             _shouldCloseFragment.value = Unit

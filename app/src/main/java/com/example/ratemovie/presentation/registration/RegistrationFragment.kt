@@ -6,10 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
-import com.example.ratemovie.presentation.activity.MainActivityViewModel
 import com.example.ratemovie.R
 import com.example.ratemovie.databinding.RegistrationFragmentBinding
 import com.example.ratemovie.domain.entities.RegistrationResult
@@ -22,7 +20,6 @@ class RegistrationFragment : Fragment() {
         get() = _binding ?: throw RuntimeException("RegistrationFragmentBinding was null")
 
     private val viewModel: RegistrationViewModel by navGraphViewModels(R.id.registrationFragment)
-    private val activityViewModel: MainActivityViewModel by activityViewModels()
 
     private val username get() = binding.etUsername.text.toString()
     private val email get() = binding.etEmail.text.toString()
@@ -55,9 +52,7 @@ class RegistrationFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.loginResult.observe(viewLifecycleOwner) { result ->
             when (result) {
-                is RegistrationResult.Success -> {
-                    activityViewModel.user.value = result.user
-                }
+                is RegistrationResult.Success -> closeFragment()
 
                 RegistrationResult.Error.EmailCollision -> showMessage(R.string.email_collision_error)
                 RegistrationResult.Error.EmptyFields -> showMessage(R.string.empty_fields_error)
@@ -69,11 +64,9 @@ class RegistrationFragment : Fragment() {
             }
         }
 
-        viewModel.shouldShowLoader.observe(viewLifecycleOwner) { showLoader ->
-            if (showLoader) showLoader() else closeLoader()
+        viewModel.shouldShowLoader.observe(viewLifecycleOwner) { show ->
+            if (show) showLoader() else closeLoader()
         }
-
-        viewModel.shouldCloseFragment.observe(viewLifecycleOwner) { closeFragment() }
     }
 
     private fun showLoader() {

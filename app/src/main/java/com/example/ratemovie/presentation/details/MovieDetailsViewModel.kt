@@ -12,7 +12,7 @@ import com.example.ratemovie.domain.usecases.DeleteMovieFromFavoritesUseCase
 import com.example.ratemovie.domain.usecases.GetMovieReviewsUseCase
 import com.example.ratemovie.domain.usecases.GetUserReviewUseCase
 import com.example.ratemovie.domain.entities.Review
-import com.google.firebase.auth.FirebaseAuth
+import com.example.ratemovie.domain.utils.Globals
 import kotlinx.coroutines.launch
 
 class MovieDetailsViewModel(private val movieId: Int) : ViewModel() {
@@ -26,7 +26,7 @@ class MovieDetailsViewModel(private val movieId: Int) : ViewModel() {
     private val _userReview = MutableLiveData<Review?>()
     val userReview: LiveData<Review?> get() = _userReview
 
-    private val _shouldShowLoader = MutableLiveData(false)
+    private val _shouldShowLoader = MutableLiveData<Boolean>()
     val shouldShowLoader: LiveData<Boolean> get() = _shouldShowLoader
 
     private val movieRepository = MovieRepositoryImpl()
@@ -51,23 +51,35 @@ class MovieDetailsViewModel(private val movieId: Int) : ViewModel() {
         _userReview.value = getUserReviewUseCase(userId, movieId)
     }
 
-    fun addToFavorites(movieId: Int) {
+    fun onFavoriteButtonClicked(movieId: Int) {
+        val userLikesMovie = _isFavorite.value ?: return
+
+        when {
+            userLikesMovie -> deleteFromFavorites(movieId)
+
+            else -> addToFavorites(movieId)
+        }
+    }
+
+    private fun addToFavorites(movieId: Int) {
         _shouldShowLoader.value = true
-        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val userId = Globals.User?.id ?: return
 
         viewModelScope.launch {
             addMovieToFavoritesUseCase(userId, movieId)
+            Globals.User?.addMovieToFavorites(movieId.toString())
             _isFavorite.value = true
             _shouldShowLoader.value = false
         }
     }
 
-    fun deleteFromFavorites(movieId: Int) {
+    private fun deleteFromFavorites(movieId: Int) {
         _shouldShowLoader.value = true
-        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val userId = Globals.User?.id ?: return
 
         viewModelScope.launch {
             deleteMovieFromFavoritesUseCase(userId, movieId)
+            Globals.User?.deleteMovieFromFavorites(movieId.toString())
             _isFavorite.value = false
             _shouldShowLoader.value = false
         }
@@ -79,11 +91,11 @@ class MovieDetailsViewModel(private val movieId: Int) : ViewModel() {
 
             getMovieReviews(movieId)
 
-            val userId = FirebaseAuth.getInstance().currentUser?.uid
+            val user = Globals.User
 
-            if (userId != null) {
-                checkUserLikesMovie(userId, movieId)
-                getUserReview(userId, movieId)
+            if (user != null) {
+                checkUserLikesMovie(user.id, movieId)
+                getUserReview(user.id, movieId)
             }
 
             _shouldShowLoader.value = false

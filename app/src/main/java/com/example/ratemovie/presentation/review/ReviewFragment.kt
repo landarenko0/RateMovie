@@ -5,15 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
-import com.example.ratemovie.presentation.activity.MainActivityViewModel
 import com.example.ratemovie.R
 import com.example.ratemovie.databinding.ReviewFragmentBinding
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.domain.entities.Review
+import com.example.ratemovie.domain.utils.Globals
 import com.example.ratemovie.presentation.loader.LoaderDialogFragment
 import com.example.ratemovie.presentation.details.MovieDetailsViewModel
 
@@ -25,7 +24,6 @@ class ReviewFragment : Fragment() {
 
     private val viewModel: ReviewViewModel by navGraphViewModels(R.id.reviewFragment)
     private val movieDetailsViewModel: MovieDetailsViewModel by navGraphViewModels(R.id.movieDetailsFragment)
-    private val activityViewModel: MainActivityViewModel by activityViewModels()
 
     private val reviewText get() = binding.etReviewText.text.toString()
     private val grade get() = binding.rbRating.rating.toInt()
@@ -48,10 +46,14 @@ class ReviewFragment : Fragment() {
         val review = args.review
         val movie = args.movie
 
-
+        checkUserIsNotNull()
         setInfo(review, movie)
         setOnClickListener(review, movie)
         observeViewModel()
+    }
+
+    private fun checkUserIsNotNull() {
+        if (Globals.User == null) closeFragment()
     }
 
     private fun setInfo(review: Review?, movie: Movie) {
@@ -71,13 +73,11 @@ class ReviewFragment : Fragment() {
     private fun setOnClickListener(review: Review?, movie: Movie) {
         binding.btnSaveReview.setOnClickListener {
             viewModel.saveReview(reviewText, grade, movie.id)
-            activityViewModel.addReviewedMovie(movie)
         }
 
         if (review != null) {
             binding.btnDeleteReview.setOnClickListener {
-                viewModel.deleteReview(review, movie)
-                activityViewModel.deleteReviewedMovie(movie)
+                viewModel.deleteReview(review, movie.id)
             }
         }
     }
@@ -85,17 +85,8 @@ class ReviewFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.shouldCloseFragment.observe(viewLifecycleOwner) { closeFragment() }
 
-        viewModel.shouldShowLoader.observe(viewLifecycleOwner) { showLoader ->
-            if (showLoader) {
-                showLoader()
-            }
-            else {
-                closeLoader()
-            }
-        }
-
-        activityViewModel.user.observe(viewLifecycleOwner) { user ->
-            if (user == null) closeFragment()
+        viewModel.shouldShowLoader.observe(viewLifecycleOwner) { show ->
+            if (show) showLoader() else closeLoader()
         }
     }
 

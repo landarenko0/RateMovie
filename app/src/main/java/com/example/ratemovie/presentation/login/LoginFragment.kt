@@ -6,10 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
-import com.example.ratemovie.presentation.activity.MainActivityViewModel
 import com.example.ratemovie.R
 import com.example.ratemovie.databinding.LoginFragmentBinding
 import com.example.ratemovie.domain.entities.LoginResult
@@ -22,7 +20,6 @@ class LoginFragment : Fragment() {
         get() = _binding ?: throw RuntimeException("LoginFragmentBinding was null")
 
     private val viewModel: LoginViewModel by navGraphViewModels(R.id.loginFragment)
-    private val activityViewModel: MainActivityViewModel by activityViewModels()
 
     private val email get() = binding.etEmail.text.toString()
     private val password get() = binding.etPassword.text.toString()
@@ -48,9 +45,7 @@ class LoginFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.loginResult.observe(viewLifecycleOwner) { result ->
             when (result) {
-                is LoginResult.Success -> {
-                    activityViewModel.user.value = result.user
-                }
+                is LoginResult.Success -> closeFragment()
 
                 LoginResult.Error.EmptyFields -> showMessage(R.string.empty_fields_error)
                 LoginResult.Error.InvalidCredentials -> showMessage(R.string.invalid_data_error)
@@ -61,8 +56,6 @@ class LoginFragment : Fragment() {
         viewModel.shouldShowLoader.observe(viewLifecycleOwner) { showLoader ->
             if (showLoader) showLoader() else closeLoader()
         }
-
-        viewModel.shouldCloseFragment.observe(viewLifecycleOwner) { closeFragment() }
     }
 
     private fun showLoader() {
@@ -74,13 +67,9 @@ class LoginFragment : Fragment() {
     }
 
     private fun setOnClickListeners() {
-        binding.btnSignIn.setOnClickListener {
-            viewModel.signIn(email, password)
-        }
+        binding.btnSignIn.setOnClickListener { viewModel.signIn(email, password) }
 
-        binding.btnRegistration.setOnClickListener {
-            openRegisterFragment()
-        }
+        binding.btnRegistration.setOnClickListener { openRegisterFragment() }
     }
 
     private fun showMessage(resId: Int) = Toast.makeText(context, resId, Toast.LENGTH_SHORT).show()

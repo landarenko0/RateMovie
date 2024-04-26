@@ -5,13 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
-import com.example.ratemovie.presentation.activity.MainActivityViewModel
 import com.example.ratemovie.R
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.databinding.AccountFragmentBinding
+import com.example.ratemovie.domain.utils.Globals
 import com.example.ratemovie.presentation.adapters.MoviesAdapter
 
 class AccountFragment : Fragment() {
@@ -21,7 +20,6 @@ class AccountFragment : Fragment() {
         get() = _binding ?: throw RuntimeException("AccountFragmentBinding was null")
 
     private val viewModel: AccountViewModel by navGraphViewModels(R.id.navigation_account)
-    private val activityViewModel: MainActivityViewModel by activityViewModels()
 
     private val likedMoviesAdapter = MoviesAdapter()
     private val reviewedMoviesAdapter = MoviesAdapter()
@@ -38,10 +36,35 @@ class AccountFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        checkUserIsNotNull()
         setupRecyclerViews()
         setupButtons()
         setupRadioButtons()
         observeViewModel()
+    }
+
+    private fun checkUserIsNotNull() {
+        val user = Globals.User
+
+        with(binding) {
+            if (user != null) {
+                tvUsername.text = user.username
+                tvEmail.text = user.email
+
+                viewModel.getUserLikedMovies(user.liked)
+                viewModel.getUserReviewedMovies(user.reviewed)
+
+                btnSignOut.visibility = View.VISIBLE
+                btnSignIn.visibility = View.GONE
+            }
+            else {
+                tvUsername.text = getString(R.string.unauthorized)
+
+                tvEmail.visibility = View.GONE
+                btnSignOut.visibility = View.GONE
+                btnSignIn.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun setupRadioButtons() {
@@ -66,7 +89,6 @@ class AccountFragment : Fragment() {
         with(binding) {
             btnSignOut.setOnClickListener {
                 viewModel.signOut()
-                activityViewModel.user.value = null
             }
 
             btnSignIn.setOnClickListener {
@@ -86,27 +108,6 @@ class AccountFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        activityViewModel.user.observe(viewLifecycleOwner) { user ->
-            with(binding) {
-                if (user != null) {
-                    tvUsername.text = user.username
-                    tvEmail.text = user.email
-
-                    viewModel.getUserLikedMovies(user.liked)
-                    viewModel.getUserReviewedMovies(user.reviewed)
-
-                    btnSignOut.visibility = View.VISIBLE
-                    btnSignIn.visibility = View.GONE
-                } else {
-                    tvUsername.text = getString(R.string.unauthorized)
-
-                    tvEmail.visibility = View.GONE
-                    btnSignOut.visibility = View.GONE
-                    btnSignIn.visibility = View.VISIBLE
-                }
-            }
-        }
-
         viewModel.likedMovies.observe(viewLifecycleOwner) { movies ->
             with(binding) {
                 if (!movies.isNullOrEmpty()) {
@@ -138,12 +139,14 @@ class AccountFragment : Fragment() {
 
     private fun showMovieDetailsFragment(movie: Movie) {
         val action = AccountFragmentDirections.actionNavigationAccountToMovieDetailsFragment(movie)
+        //val action = AccountFragmentDirections.actionNavigationAccountToNavMovieDetails()
 
         findNavController().navigate(action)
     }
 
     private fun showLoginFragment() {
         val action = AccountFragmentDirections.actionNavigationAccountToLoginFragment()
+        //val action = AccountFragmentDirections.actionAccountToLoginFragment()
 
         findNavController().navigate(action)
     }

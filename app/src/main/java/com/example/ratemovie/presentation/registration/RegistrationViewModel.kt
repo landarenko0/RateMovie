@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.ratemovie.data.repositories.user.UserRepositoryImpl
 import com.example.ratemovie.domain.usecases.SignUpUseCase
 import com.example.ratemovie.domain.entities.RegistrationResult
+import com.example.ratemovie.domain.utils.Globals
 import kotlinx.coroutines.launch
 
 class RegistrationViewModel : ViewModel() {
@@ -16,9 +17,6 @@ class RegistrationViewModel : ViewModel() {
 
     private val _shouldShowLoader = MutableLiveData<Boolean>()
     val shouldShowLoader: LiveData<Boolean> = _shouldShowLoader
-
-    private val _shouldCloseFragment = MutableLiveData<Unit>()
-    val shouldCloseFragment : LiveData<Unit> = _shouldCloseFragment
 
     private val userRepository = UserRepositoryImpl()
 
@@ -33,7 +31,7 @@ class RegistrationViewModel : ViewModel() {
 
             _shouldShowLoader.value = false
 
-            if (result is RegistrationResult.Success) _shouldCloseFragment.value = Unit
+            if (result is RegistrationResult.Success) Globals.User = result.user
         }
     }
 }

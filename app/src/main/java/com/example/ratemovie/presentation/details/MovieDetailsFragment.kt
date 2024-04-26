@@ -5,22 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import coil.load
-import com.example.ratemovie.presentation.activity.MainActivityViewModel
 import com.example.ratemovie.R
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.domain.entities.Review
 import com.example.ratemovie.databinding.MovieDetailsFragmentBinding
+import com.example.ratemovie.domain.utils.Globals
 import com.example.ratemovie.presentation.loader.LoaderDialogFragment
 import com.example.ratemovie.presentation.adapters.ReviewsAdapter
 
 class MovieDetailsFragment : Fragment() {
-
-    // TODO: Добавить лоадер при запуске фрагмента
 
     private var _binding: MovieDetailsFragmentBinding? = null
     private val binding
@@ -31,7 +28,6 @@ class MovieDetailsFragment : Fragment() {
     private val viewModel: MovieDetailsViewModel by navGraphViewModels(R.id.movieDetailsFragment) {
         MovieDetailsViewModelFactory(args.movie.id)
     }
-    private val activityViewModel: MainActivityViewModel by activityViewModels()
 
     private val reviewsAdapter = ReviewsAdapter()
 
@@ -51,10 +47,26 @@ class MovieDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.updateData()
 
+        checkUserIsNotNull()
         setupMovieInfo(args.movie)
         setupRecyclerView()
-        setupOnClickListeners(args.movie)
+        setupOnClickListeners(viewModel.userReview.value, args.movie)
         observeViewModel()
+    }
+
+    private fun checkUserIsNotNull() {
+        val user = Globals.User
+
+        with(binding) {
+            if (user != null) {
+                ibFavorite.visibility = View.VISIBLE
+                ibEditReview.visibility = View.VISIBLE
+            }
+            else {
+                ibFavorite.visibility = View.GONE
+                ibEditReview.visibility = View.GONE
+            }
+        }
     }
 
     private fun setupMovieInfo(movie: Movie) {
@@ -67,26 +79,15 @@ class MovieDetailsFragment : Fragment() {
         }
     }
 
-    private fun setupOnClickListeners(movie: Movie) {
+    private fun setupOnClickListeners(review: Review?, movie: Movie) {
         binding.ibEditReview.setOnClickListener {
             showReviewFragment(
-                review = viewModel.userReview.value,
+                review = review,
                 movie = movie
             )
         }
 
-        binding.ibFavorite.setOnClickListener {
-            val userLikesMovie = viewModel.isFavorite.value ?: return@setOnClickListener
-
-            if (userLikesMovie) {
-                viewModel.deleteFromFavorites(movie.id)
-                activityViewModel.deleteMovieFromFavorites(movie)
-            }
-            else {
-                viewModel.addToFavorites(movie.id)
-                activityViewModel.addMovieToFavorites(movie)
-            }
-        }
+        binding.ibFavorite.setOnClickListener { viewModel.onFavoriteButtonClicked(movie.id) }
     }
 
     private fun setupRecyclerView() {
@@ -94,16 +95,6 @@ class MovieDetailsFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        activityViewModel.user.observe(viewLifecycleOwner) { user ->
-            if (user == null) {
-                binding.ibFavorite.visibility = View.GONE
-                binding.ibEditReview.visibility = View.GONE
-            } else {
-                binding.ibFavorite.visibility = View.VISIBLE
-                binding.ibEditReview.visibility = View.VISIBLE
-            }
-        }
-
         viewModel.reviews.observe(viewLifecycleOwner) { reviews ->
             with(binding) {
                 if (reviews.isEmpty()) {
@@ -118,10 +109,11 @@ class MovieDetailsFragment : Fragment() {
         }
 
         viewModel.userReview.observe(viewLifecycleOwner) { review ->
-            if (activityViewModel.user.value != null) {
+            if (Globals.User != null) {
                 if (review != null) {
                     binding.ibEditReview.setImageResource(R.drawable.ic_edit_24)
-                } else {
+                }
+                else {
                     binding.ibEditReview.setImageResource(R.drawable.ic_add_24)
                 }
             }
@@ -136,13 +128,8 @@ class MovieDetailsFragment : Fragment() {
             }
         }
 
-        viewModel.shouldShowLoader.observe(viewLifecycleOwner) { showLoader ->
-            if (showLoader) {
-                showLoader()
-            }
-            else {
-                closeLoader()
-            }
+        viewModel.shouldShowLoader.observe(viewLifecycleOwner) { show ->
+            if (show) showLoader() else closeLoader()
         }
     }
 
