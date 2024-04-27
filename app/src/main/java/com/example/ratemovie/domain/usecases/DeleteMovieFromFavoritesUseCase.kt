@@ -1,8 +1,9 @@
 package com.example.ratemovie.domain.usecases
 
 import com.example.ratemovie.data.repositories.user.UserRepository
+import javax.inject.Inject
 
-class DeleteMovieFromFavoritesUseCase(private val repository: UserRepository) {
+class DeleteMovieFromFavoritesUseCase @Inject constructor(private val repository: UserRepository) {
 
     suspend operator fun invoke(
         userId: String,

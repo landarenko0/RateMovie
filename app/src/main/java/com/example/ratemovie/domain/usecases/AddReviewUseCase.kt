@@ -2,8 +2,9 @@ package com.example.ratemovie.domain.usecases
 
 import com.example.ratemovie.data.repositories.user.UserRepository
 import com.example.ratemovie.domain.entities.Review
+import javax.inject.Inject
 
-class AddReviewUseCase(private val repository: UserRepository) {
+class AddReviewUseCase @Inject constructor(private val repository: UserRepository) {
 
     suspend operator fun invoke(
         review: Review,

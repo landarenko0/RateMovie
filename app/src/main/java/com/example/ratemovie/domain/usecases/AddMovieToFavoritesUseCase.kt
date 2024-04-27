@@ -1,8 +1,10 @@
 package com.example.ratemovie.domain.usecases
 
+import androidx.lifecycle.LiveData
 import com.example.ratemovie.data.repositories.user.UserRepository
+import javax.inject.Inject
 
-class AddMovieToFavoritesUseCase(private val repository: UserRepository) {
+class AddMovieToFavoritesUseCase @Inject constructor(private val repository: UserRepository) {
 
     suspend operator fun invoke(
         userId: String,
