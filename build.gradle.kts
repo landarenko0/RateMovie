@@ -7,5 +7,6 @@ plugins {
     kotlin("plugin.serialization") version "1.9.22"
     id("androidx.navigation.safeargs.kotlin") version "2.7.7" apply false
 
+    kotlin("kapt") version "1.9.23"
     id("com.google.dagger.hilt.android") version "2.51.1" apply false
 }
