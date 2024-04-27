@@ -1,23 +1,18 @@
 package com.example.ratemovie.data.repositories.movieslist
 
 import com.example.ratemovie.domain.entities.Movie
-import com.example.ratemovie.domain.api.Api
 import com.example.ratemovie.domain.services.MoviesApiService
-import com.example.ratemovie.domain.retrofit.RetrofitBuilder
+import javax.inject.Inject
 
-class MoviesListRepositoryImpl : MoviesListRepository {
+class MoviesListRepositoryImpl @Inject constructor(
+    private val service: MoviesApiService
+) : MoviesListRepository {
 
     override suspend fun getNewMoviesList(): List<Movie> {
-        val retrofit = RetrofitBuilder.build(Api.BASE_URL)
-        val service = retrofit.create(MoviesApiService::class.java)
-
         return service.searchNewMovies().movies
     }
 
     override suspend fun searchMoviesByName(name: String): List<Movie> {
-        val retrofit = RetrofitBuilder.build(Api.BASE_URL)
-        val service = retrofit.create(MoviesApiService::class.java)
-
         val movies = service.searchMoviesByKeywords(name).movies
 
         return movies.filter {
@@ -26,9 +21,6 @@ class MoviesListRepositoryImpl : MoviesListRepository {
     }
 
     override suspend fun getMoviesByIds(ids: List<String>): List<Movie> {
-        val retrofit = RetrofitBuilder.build(Api.BASE_URL)
-        val service = retrofit.create(MoviesApiService::class.java)
-
         return if (ids.isEmpty()) emptyList() else service.getMoviesByIds(ids).movies
     }
 }
