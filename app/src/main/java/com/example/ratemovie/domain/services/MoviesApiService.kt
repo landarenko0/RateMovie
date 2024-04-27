@@ -1,6 +1,6 @@
 package com.example.ratemovie.domain.services
 
-import com.example.ratemovie.domain.api.ApiResponse
+import com.example.ratemovie.domain.entities.ApiResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

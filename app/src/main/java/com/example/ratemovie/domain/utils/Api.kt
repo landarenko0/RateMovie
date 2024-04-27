@@ -1,4 +1,4 @@
-package com.example.ratemovie.domain.api
+package com.example.ratemovie.domain.utils
 
 import com.example.ratemovie.BuildConfig
 

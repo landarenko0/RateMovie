@@ -1,6 +1,6 @@
 package com.example.ratemovie.di
 
-import com.example.ratemovie.domain.api.Api
+import com.example.ratemovie.domain.utils.Api
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
