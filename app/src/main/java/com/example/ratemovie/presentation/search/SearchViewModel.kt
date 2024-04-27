@@ -4,21 +4,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ratemovie.data.repositories.movieslist.MoviesListRepositoryImpl
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.domain.usecases.SearchMoviesByNameUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SearchViewModel : ViewModel() {
+@HiltViewModel
+class SearchViewModel @Inject constructor(
+    private val searchMoviesByNameUseCase: SearchMoviesByNameUseCase
+) : ViewModel() {
 
     private val _movies = MutableLiveData<List<Movie>>()
     val movies: LiveData<List<Movie>> get() = _movies
-
-    private val repository = MoviesListRepositoryImpl()
-
-    private val searchMoviesByNameUseCase = SearchMoviesByNameUseCase(repository)
 
     private var searchJob: Job? = null
 

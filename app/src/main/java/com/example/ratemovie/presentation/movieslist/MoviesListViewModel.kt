@@ -7,16 +7,17 @@ import androidx.lifecycle.viewModelScope
 import com.example.ratemovie.data.repositories.movieslist.MoviesListRepositoryImpl
 import com.example.ratemovie.domain.usecases.GetNewMoviesListUseCase
 import com.example.ratemovie.domain.entities.Movie
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MoviesListViewModel : ViewModel() {
+@HiltViewModel
+class MoviesListViewModel @Inject constructor(
+    private val getNewMoviesListUseCase: GetNewMoviesListUseCase
+) : ViewModel() {
 
     private val _movies = MutableLiveData<List<Movie>>()
     val movies: LiveData<List<Movie>> = _movies
-
-    private val repository = MoviesListRepositoryImpl()
-
-    private val getNewMoviesListUseCase = GetNewMoviesListUseCase(repository)
 
     init {
         viewModelScope.launch {

@@ -4,26 +4,24 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ratemovie.data.repositories.movieslist.MoviesListRepositoryImpl
-import com.example.ratemovie.data.repositories.user.UserRepositoryImpl
 import com.example.ratemovie.domain.usecases.GetMoviesByIdsUseCase
 import com.example.ratemovie.domain.usecases.SignOutUseCase
 import com.example.ratemovie.domain.entities.Movie
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AccountViewModel : ViewModel() {
+@HiltViewModel
+class AccountViewModel @Inject constructor(
+    private val getMoviesByIdsUseCase: GetMoviesByIdsUseCase,
+    private val signOutUseCase: SignOutUseCase
+) : ViewModel() {
 
     private val _likedMovies = MutableLiveData<List<Movie>?>()
     val likedMovies: LiveData<List<Movie>?> get() = _likedMovies
 
     private val _reviewedMovies = MutableLiveData<List<Movie>?>()
     val reviewedMovies: LiveData<List<Movie>?> get() = _reviewedMovies
-
-    private val moviesRepository = MoviesListRepositoryImpl()
-    private val userRepository = UserRepositoryImpl()
-
-    private val getMoviesByIdsUseCase = GetMoviesByIdsUseCase(moviesRepository)
-    private val signOutUseCase = SignOutUseCase(userRepository)
 
     fun getUserLikedMovies(moviesIds: List<String>) {
         viewModelScope.launch {

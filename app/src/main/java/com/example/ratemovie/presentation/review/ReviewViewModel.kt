@@ -4,27 +4,28 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ratemovie.data.repositories.user.UserRepositoryImpl
 import com.example.ratemovie.domain.entities.Review
 import com.example.ratemovie.domain.usecases.AddReviewUseCase
 import com.example.ratemovie.domain.usecases.DeleteReviewUseCase
 import com.example.ratemovie.domain.usecases.GetUsernameUseCase
 import com.example.ratemovie.domain.utils.Globals
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ReviewViewModel : ViewModel() {
+@HiltViewModel
+class ReviewViewModel @Inject constructor(
+    private val getUsernameUseCase: GetUsernameUseCase,
+    private val addReviewUseCase: AddReviewUseCase,
+    private val deleteReviewUseCase: DeleteReviewUseCase
+
+) : ViewModel() {
 
     private val _shouldCloseFragment = MutableLiveData<Unit>()
     val shouldCloseFragment: LiveData<Unit> get() = _shouldCloseFragment
 
     private val _shouldShowLoader = MutableLiveData(false)
     val shouldShowLoader: LiveData<Boolean> get() = _shouldShowLoader
-
-    private val userRepository = UserRepositoryImpl()
-
-    private val getUsernameUseCase = GetUsernameUseCase(userRepository)
-    private val addReviewUseCase = AddReviewUseCase(userRepository)
-    private val deleteReviewUseCase = DeleteReviewUseCase(userRepository)
 
     fun saveReview(
         reviewText: String,
