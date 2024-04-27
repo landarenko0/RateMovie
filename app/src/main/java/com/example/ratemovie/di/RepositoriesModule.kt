@@ -6,6 +6,7 @@ import com.example.ratemovie.data.repositories.movieslist.MoviesListRepository
 import com.example.ratemovie.data.repositories.movieslist.MoviesListRepositoryImpl
 import com.example.ratemovie.data.repositories.user.UserRepository
 import com.example.ratemovie.data.repositories.user.UserRepositoryImpl
+import com.example.ratemovie.domain.services.MoviesApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +15,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RateMovieModule {
+object RepositoriesModule {
 
     @Singleton
     @Provides
@@ -24,8 +25,8 @@ object RateMovieModule {
 
     @Singleton
     @Provides
-    fun provideMoviesListRepository(): MoviesListRepository {
-        return MoviesListRepositoryImpl()
+    fun provideMoviesListRepository(service: MoviesApiService): MoviesListRepository {
+        return MoviesListRepositoryImpl(service)
     }
 
     @Singleton
