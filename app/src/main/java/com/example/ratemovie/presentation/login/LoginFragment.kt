@@ -6,20 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import com.example.ratemovie.R
 import com.example.ratemovie.databinding.LoginFragmentBinding
 import com.example.ratemovie.domain.entities.LoginResult
 import com.example.ratemovie.presentation.loader.LoaderDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginFragment : Fragment() {
 
     private var _binding: LoginFragmentBinding? = null
     private val binding
         get() = _binding ?: throw RuntimeException("LoginFragmentBinding was null")
 
-    private val viewModel: LoginViewModel by navGraphViewModels(R.id.loginFragment)
+    private val viewModel: LoginViewModel by hiltNavGraphViewModels(R.id.loginFragment)
 
     private val email get() = binding.etEmail.text.toString()
     private val password get() = binding.etPassword.text.toString()

@@ -5,25 +5,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.navGraphViewModels
 import com.example.ratemovie.R
 import com.example.ratemovie.databinding.ReviewFragmentBinding
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.domain.entities.Review
 import com.example.ratemovie.domain.utils.Globals
 import com.example.ratemovie.presentation.loader.LoaderDialogFragment
-import com.example.ratemovie.presentation.details.MovieDetailsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ReviewFragment : Fragment() {
 
     private var _binding: ReviewFragmentBinding? = null
     private val binding
         get() = _binding ?: throw RuntimeException("ReviewFragmentBinding was null")
 
-    private val viewModel: ReviewViewModel by navGraphViewModels(R.id.reviewFragment)
-    private val movieDetailsViewModel: MovieDetailsViewModel by navGraphViewModels(R.id.movieDetailsFragment)
+    private val viewModel: ReviewViewModel by hiltNavGraphViewModels(R.id.reviewFragment)
 
     private val reviewText get() = binding.etReviewText.text.toString()
     private val grade get() = binding.rbRating.rating.toInt()

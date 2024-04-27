@@ -5,20 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import com.example.ratemovie.R
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.databinding.MoviesListFragmentBinding
 import com.example.ratemovie.presentation.adapters.MoviesAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MoviesListFragment : Fragment() {
 
     private var _binding: MoviesListFragmentBinding? = null
     private val binding
         get() = _binding ?: throw RuntimeException("MoviesListFragmentBinding was null")
 
-    private val viewModel: MoviesListViewModel by navGraphViewModels(R.id.navigation_movies)
+    private val viewModel: MoviesListViewModel by hiltNavGraphViewModels(R.id.navigation_movies)
 
     private val moviesAdapter = MoviesAdapter()
 
@@ -51,7 +53,6 @@ class MoviesListFragment : Fragment() {
     }
 
     private fun showMovieDetailsFragment(movie: Movie) {
-        //val action = MoviesListFragmentDirections.actionNavigationMoviesToNavMovieDetails()
         val action =
             MoviesListFragmentDirections.actionMoviesListFragmentToMovieDetailsFragment(movie)
 

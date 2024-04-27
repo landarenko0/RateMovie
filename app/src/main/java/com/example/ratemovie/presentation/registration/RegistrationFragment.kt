@@ -6,20 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import com.example.ratemovie.R
 import com.example.ratemovie.databinding.RegistrationFragmentBinding
 import com.example.ratemovie.domain.entities.RegistrationResult
 import com.example.ratemovie.presentation.loader.LoaderDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RegistrationFragment : Fragment() {
 
     private var _binding: RegistrationFragmentBinding? = null
     private val binding
         get() = _binding ?: throw RuntimeException("RegistrationFragmentBinding was null")
 
-    private val viewModel: RegistrationViewModel by navGraphViewModels(R.id.registrationFragment)
+    private val viewModel: RegistrationViewModel by hiltNavGraphViewModels(R.id.registrationFragment)
 
     private val username get() = binding.etUsername.text.toString()
     private val email get() = binding.etEmail.text.toString()

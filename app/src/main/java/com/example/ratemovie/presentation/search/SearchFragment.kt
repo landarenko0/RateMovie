@@ -6,20 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.example.ratemovie.R
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.databinding.SearchFragmentBinding
 import com.example.ratemovie.presentation.adapters.SearchMoviesAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SearchFragment : Fragment() {
 
     private var _binding: SearchFragmentBinding? = null
     private val binding
         get() = _binding ?: throw RuntimeException("SearchFragmentBinding was null")
 
-    private val viewModel: SearchViewModel by navGraphViewModels(R.id.navigation_search)
+    private val viewModel: SearchViewModel by hiltNavGraphViewModels(R.id.navigation_search)
 
     private val moviesAdapter = SearchMoviesAdapter()
 

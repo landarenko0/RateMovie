@@ -5,21 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import com.example.ratemovie.R
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.databinding.AccountFragmentBinding
 import com.example.ratemovie.domain.utils.Globals
 import com.example.ratemovie.presentation.adapters.MoviesAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AccountFragment : Fragment() {
 
     private var _binding: AccountFragmentBinding? = null
     private val binding
         get() = _binding ?: throw RuntimeException("AccountFragmentBinding was null")
 
-    private val viewModel: AccountViewModel by navGraphViewModels(R.id.navigation_account)
+    private val viewModel: AccountViewModel by hiltNavGraphViewModels(R.id.navigation_account)
 
     private val likedMoviesAdapter = MoviesAdapter()
     private val reviewedMoviesAdapter = MoviesAdapter()
