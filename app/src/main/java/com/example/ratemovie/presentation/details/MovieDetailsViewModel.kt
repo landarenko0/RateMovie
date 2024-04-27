@@ -4,8 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ratemovie.data.repositories.movie.MovieRepositoryImpl
-import com.example.ratemovie.data.repositories.user.UserRepositoryImpl
 import com.example.ratemovie.domain.usecases.AddMovieToFavoritesUseCase
 import com.example.ratemovie.domain.usecases.CheckUserLikesMovieUseCase
 import com.example.ratemovie.domain.usecases.DeleteMovieFromFavoritesUseCase
@@ -13,9 +11,21 @@ import com.example.ratemovie.domain.usecases.GetMovieReviewsUseCase
 import com.example.ratemovie.domain.usecases.GetUserReviewUseCase
 import com.example.ratemovie.domain.entities.Review
 import com.example.ratemovie.domain.utils.Globals
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 
-class MovieDetailsViewModel(private val movieId: Int) : ViewModel() {
+@HiltViewModel(assistedFactory = MovieDetailsViewModel.Factory::class)
+class MovieDetailsViewModel @AssistedInject constructor(
+    @Assisted private val movieId: Int,
+    private val getMovieReviewsUseCase: GetMovieReviewsUseCase,
+    private val checkUserLikesMovieUseCase: CheckUserLikesMovieUseCase,
+    private val getUserReviewUseCase: GetUserReviewUseCase,
+    private val addMovieToFavoritesUseCase: AddMovieToFavoritesUseCase,
+    private val deleteMovieFromFavoritesUseCase: DeleteMovieFromFavoritesUseCase
+) : ViewModel() {
 
     private val _reviews = MutableLiveData<List<Review>>()
     val reviews: LiveData<List<Review>> get() = _reviews
@@ -28,16 +38,6 @@ class MovieDetailsViewModel(private val movieId: Int) : ViewModel() {
 
     private val _shouldShowLoader = MutableLiveData<Boolean>()
     val shouldShowLoader: LiveData<Boolean> get() = _shouldShowLoader
-
-    private val movieRepository = MovieRepositoryImpl()
-    private val userRepository = UserRepositoryImpl()
-
-    private val getMovieReviewsUseCase = GetMovieReviewsUseCase(movieRepository)
-    private val checkUserLikesMovieUseCase = CheckUserLikesMovieUseCase(movieRepository)
-    private val getUserReviewUseCase = GetUserReviewUseCase(movieRepository)
-
-    private val addMovieToFavoritesUseCase = AddMovieToFavoritesUseCase(userRepository)
-    private val deleteMovieFromFavoritesUseCase = DeleteMovieFromFavoritesUseCase(userRepository)
 
     private suspend fun getMovieReviews(movieId: Int) {
         _reviews.value = getMovieReviewsUseCase(movieId)
@@ -100,5 +100,10 @@ class MovieDetailsViewModel(private val movieId: Int) : ViewModel() {
 
             _shouldShowLoader.value = false
         }
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun build(movieId: Int): MovieDetailsViewModel
     }
 }

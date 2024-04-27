@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.navGraphViewModels
 import coil.load
 import com.example.ratemovie.R
 import com.example.ratemovie.domain.entities.Movie
@@ -25,8 +25,8 @@ class MovieDetailsFragment : Fragment() {
 
     private val args: MovieDetailsFragmentArgs by navArgs()
 
-    private val viewModel: MovieDetailsViewModel by navGraphViewModels(R.id.movieDetailsFragment) {
-        MovieDetailsViewModelFactory(args.movie.id)
+    private val viewModel: MovieDetailsViewModel by hiltNavGraphViewModels(R.id.movieDetailsFragment) { factory: MovieDetailsViewModel.Factory ->
+        factory.build(args.movie.id)
     }
 
     private val reviewsAdapter = ReviewsAdapter()
@@ -61,8 +61,7 @@ class MovieDetailsFragment : Fragment() {
             if (user != null) {
                 ibFavorite.visibility = View.VISIBLE
                 ibEditReview.visibility = View.VISIBLE
-            }
-            else {
+            } else {
                 ibFavorite.visibility = View.GONE
                 ibEditReview.visibility = View.GONE
             }
@@ -112,8 +111,7 @@ class MovieDetailsFragment : Fragment() {
             if (Globals.User != null) {
                 if (review != null) {
                     binding.ibEditReview.setImageResource(R.drawable.ic_edit_24)
-                }
-                else {
+                } else {
                     binding.ibEditReview.setImageResource(R.drawable.ic_add_24)
                 }
             }
@@ -122,8 +120,7 @@ class MovieDetailsFragment : Fragment() {
         viewModel.isFavorite.observe(viewLifecycleOwner) { movieIsFavorite ->
             if (movieIsFavorite) {
                 binding.ibFavorite.setImageResource(R.drawable.ic_favorite_filled_24)
-            }
-            else {
+            } else {
                 binding.ibFavorite.setImageResource(R.drawable.ic_favorite_24)
             }
         }
