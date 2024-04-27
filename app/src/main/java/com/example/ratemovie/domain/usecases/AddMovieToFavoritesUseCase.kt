@@ -1,6 +1,5 @@
 package com.example.ratemovie.domain.usecases
 
-import androidx.lifecycle.LiveData
 import com.example.ratemovie.data.repositories.user.UserRepository
 import javax.inject.Inject
 
