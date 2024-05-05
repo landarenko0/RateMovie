@@ -6,11 +6,6 @@ import javax.inject.Inject
 
 class AddReviewUseCase @Inject constructor(private val repository: UserRepository) {
 
-    suspend operator fun invoke(
-        review: Review,
-        userId: String,
-        movieId: Int
-    ) {
+    suspend operator fun invoke(review: Review, userId: String, movieId: Int) =
         repository.addReview(review, userId, movieId)
-    }
 }

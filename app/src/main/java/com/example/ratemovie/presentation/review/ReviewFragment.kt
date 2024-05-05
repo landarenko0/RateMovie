@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
@@ -12,6 +13,7 @@ import com.example.ratemovie.R
 import com.example.ratemovie.databinding.ReviewFragmentBinding
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.domain.entities.Review
+import com.example.ratemovie.domain.remote.RemoteResult
 import com.example.ratemovie.domain.utils.Globals
 import com.example.ratemovie.presentation.loader.LoaderDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -83,10 +85,20 @@ class ReviewFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.shouldCloseFragment.observe(viewLifecycleOwner) { closeFragment() }
+        viewModel.result.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is RemoteResult.Loading -> showLoader()
+                is RemoteResult.Success -> {
+                    closeLoader()
+                    closeFragment()
+                }
 
-        viewModel.shouldShowLoader.observe(viewLifecycleOwner) { show ->
-            if (show) showLoader() else closeLoader()
+                is RemoteResult.Error -> {
+                    closeLoader()
+
+                    Toast.makeText(context, R.string.default_error, Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 

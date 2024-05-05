@@ -1,6 +1,7 @@
 package com.example.ratemovie.domain.services
 
-import com.example.ratemovie.domain.entities.ApiResponse
+import com.example.ratemovie.domain.remote.ApiResponse
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -10,12 +11,12 @@ interface MoviesApiService {
     suspend fun searchMoviesByKeywords(
         @Query("query") keywords: String,
         @Query("limit") limit: Int = 20
-    ): ApiResponse
+    ): Response<ApiResponse>
 
     @GET("v1.4/movie")
     suspend fun searchMoviesByGenre(
         @Query("genres.name") genre: String
-    ): ApiResponse
+    ): Response<ApiResponse>
 
     @GET("v1.4/movie")
     suspend fun searchNewMovies(
@@ -24,10 +25,10 @@ interface MoviesApiService {
         @Query("status") status: List<String> = listOf("completed"),
         @Query("year") year: List<String> = listOf("2023-2030"),
         @Query("rating.kp") rating: List<String> = listOf("7-10")
-    ): ApiResponse
+    ): Response<ApiResponse>
 
     @GET("v1.4/movie")
     suspend fun getMoviesByIds(
         @Query("id") ids: List<String>
-    ): ApiResponse
+    ): Response<ApiResponse>
 }

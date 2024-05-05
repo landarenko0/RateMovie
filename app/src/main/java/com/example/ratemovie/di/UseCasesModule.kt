@@ -13,7 +13,6 @@ import com.example.ratemovie.domain.usecases.GetMoviesByIdsUseCase
 import com.example.ratemovie.domain.usecases.GetNewMoviesListUseCase
 import com.example.ratemovie.domain.usecases.GetUserReviewUseCase
 import com.example.ratemovie.domain.usecases.GetUserUseCase
-import com.example.ratemovie.domain.usecases.GetUsernameUseCase
 import com.example.ratemovie.domain.usecases.SearchMoviesByNameUseCase
 import com.example.ratemovie.domain.usecases.SignInUseCase
 import com.example.ratemovie.domain.usecases.SignOutUseCase
@@ -74,12 +73,6 @@ object UseCasesModule {
     @Provides
     fun provideGetNewMoviesListUseCase(repository: MoviesListRepository): GetNewMoviesListUseCase {
         return GetNewMoviesListUseCase(repository)
-    }
-
-    @Singleton
-    @Provides
-    fun provideGetUsernameUseCase(repository: UserRepository): GetUsernameUseCase {
-        return GetUsernameUseCase(repository)
     }
 
     @Singleton

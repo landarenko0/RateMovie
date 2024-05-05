@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ratemovie.domain.entities.Movie
+import com.example.ratemovie.domain.remote.RemoteResult
 import com.example.ratemovie.domain.usecases.SearchMoviesByNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -17,13 +18,15 @@ class SearchViewModel @Inject constructor(
     private val searchMoviesByNameUseCase: SearchMoviesByNameUseCase
 ) : ViewModel() {
 
-    private val _movies = MutableLiveData<List<Movie>>()
-    val movies: LiveData<List<Movie>> get() = _movies
+    private val _movies = MutableLiveData<RemoteResult<List<Movie>>>()
+    val movies: LiveData<RemoteResult<List<Movie>>> get() = _movies
 
     private var searchJob: Job? = null
 
     private suspend fun searchMoviesByKeywords(name: String) {
-        _movies.value = searchMoviesByNameUseCase(name)
+        searchMoviesByNameUseCase(name).collect {
+            _movies.value = it
+        }
     }
 
     fun onSearchTextChanged(keywords: String) {

@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.ratemovie.R
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.databinding.SearchFragmentBinding
+import com.example.ratemovie.domain.remote.RemoteResult
 import com.example.ratemovie.presentation.adapters.SearchMoviesAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -74,21 +75,30 @@ class SearchFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.movies.observe(viewLifecycleOwner) { movies ->
-            if (movies.isNotEmpty()) {
-                binding.tvEmptyMoviesList.visibility = View.GONE
-            }
-            else {
-                binding.tvEmptyMoviesList.visibility = View.VISIBLE
-                binding.tvEmptyMoviesList.text = getText(R.string.no_search_result)
-            }
+        viewModel.movies.observe(viewLifecycleOwner) { result ->
+            when(result) {
+                RemoteResult.Loading -> { }
 
-            moviesAdapter.submitList(movies)
+                is RemoteResult.Success -> {
+                    val movies = result.data
+
+                    if (movies.isNotEmpty()) {
+                        binding.tvEmptyMoviesList.visibility = View.GONE
+                    }
+                    else {
+                        binding.tvEmptyMoviesList.visibility = View.VISIBLE
+                        binding.tvEmptyMoviesList.text = getText(R.string.no_search_result)
+                    }
+
+                    moviesAdapter.submitList(movies)
+                }
+
+                is RemoteResult.Error -> { }
+            }
         }
     }
 
     private fun showMovieDetailsFragment(movie: Movie) {
-        //val action = SearchFragmentDirections.actionNavigationSearchToNavMovieDetails()
         val action = SearchFragmentDirections.actionNavigationSearchToMovieDetailsFragment(movie)
 
         findNavController().navigate(action)

@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.ratemovie.R
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.databinding.AccountFragmentBinding
+import com.example.ratemovie.domain.remote.RemoteResult
 import com.example.ratemovie.domain.utils.Globals
 import com.example.ratemovie.presentation.adapters.MoviesAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -110,45 +111,63 @@ class AccountFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.likedMovies.observe(viewLifecycleOwner) { movies ->
-            with(binding) {
-                if (!movies.isNullOrEmpty()) {
-                    tvYouLike.visibility = View.VISIBLE
-                    rvLikedMovies.visibility = View.VISIBLE
+        viewModel.likedMovies.observe(viewLifecycleOwner) { result ->
+            when(result) {
+                RemoteResult.Loading -> { }
 
-                    likedMoviesAdapter.submitList(movies)
-                } else {
-                    tvYouLike.visibility = View.GONE
-                    rvLikedMovies.visibility = View.GONE
+                is RemoteResult.Success -> {
+                    val movies = result.data
+
+                    with(binding) {
+                        if (!movies.isNullOrEmpty()) {
+                            tvYouLike.visibility = View.VISIBLE
+                            rvLikedMovies.visibility = View.VISIBLE
+
+                            likedMoviesAdapter.submitList(movies)
+                        } else {
+                            tvYouLike.visibility = View.GONE
+                            rvLikedMovies.visibility = View.GONE
+                        }
+                    }
                 }
+
+                is RemoteResult.Error -> { }
             }
         }
 
-        viewModel.reviewedMovies.observe(viewLifecycleOwner) { movies ->
-            with(binding) {
-                if (!movies.isNullOrEmpty()) {
-                    tvYouLeftReview.visibility = View.VISIBLE
-                    rvReviewedMovies.visibility = View.VISIBLE
+        viewModel.reviewedMovies.observe(viewLifecycleOwner) { result ->
+            when(result) {
+                RemoteResult.Loading -> { }
 
-                    reviewedMoviesAdapter.submitList(movies)
-                } else {
-                    tvYouLeftReview.visibility = View.GONE
-                    rvReviewedMovies.visibility = View.GONE
+                is RemoteResult.Success -> {
+                    val movies = result.data
+
+                    with(binding) {
+                        if (!movies.isNullOrEmpty()) {
+                            tvYouLeftReview.visibility = View.VISIBLE
+                            rvReviewedMovies.visibility = View.VISIBLE
+
+                            reviewedMoviesAdapter.submitList(movies)
+                        } else {
+                            tvYouLeftReview.visibility = View.GONE
+                            rvReviewedMovies.visibility = View.GONE
+                        }
+                    }
                 }
+
+                is RemoteResult.Error -> TODO()
             }
         }
     }
 
     private fun showMovieDetailsFragment(movie: Movie) {
         val action = AccountFragmentDirections.actionNavigationAccountToMovieDetailsFragment(movie)
-        //val action = AccountFragmentDirections.actionNavigationAccountToNavMovieDetails()
 
         findNavController().navigate(action)
     }
 
     private fun showLoginFragment() {
         val action = AccountFragmentDirections.actionNavigationAccountToLoginFragment()
-        //val action = AccountFragmentDirections.actionAccountToLoginFragment()
 
         findNavController().navigate(action)
     }

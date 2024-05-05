@@ -10,7 +10,8 @@ import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.ratemovie.R
 import com.example.ratemovie.databinding.RegistrationFragmentBinding
-import com.example.ratemovie.domain.entities.RegistrationResult
+import com.example.ratemovie.domain.remote.RegistrationResult
+import com.example.ratemovie.domain.remote.RemoteResult
 import com.example.ratemovie.presentation.loader.LoaderDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -54,20 +55,26 @@ class RegistrationFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.loginResult.observe(viewLifecycleOwner) { result ->
             when (result) {
-                is RegistrationResult.Success -> closeFragment()
+                is RemoteResult.Loading -> showLoader()
+                is RemoteResult.Success -> {
+                    closeLoader()
+                    closeFragment()
+                }
 
-                RegistrationResult.Error.EmailCollision -> showMessage(R.string.email_collision_error)
-                RegistrationResult.Error.EmptyFields -> showMessage(R.string.empty_fields_error)
-                RegistrationResult.Error.InvalidCredentials -> showMessage(R.string.invalid_email_error)
-                RegistrationResult.Error.InvalidSymbols -> showMessage(R.string.invalid_symbols_error)
-                RegistrationResult.Error.UsernameCollision -> showMessage(R.string.username_collision_error)
-                RegistrationResult.Error.WeakPassword -> showMessage(R.string.weak_password_error)
-                RegistrationResult.Error.Default -> showMessage(R.string.default_error)
+                is RemoteResult.Error -> {
+                    closeLoader()
+
+                    when (result.message) {
+                        RegistrationResult.Error.EMAIL_COLLISION -> showMessage(R.string.email_collision_error)
+                        RegistrationResult.Error.EMPTY_FIELDS -> showMessage(R.string.empty_fields_error)
+                        RegistrationResult.Error.INVALID_CREDENTIALS -> showMessage(R.string.invalid_email_error)
+                        RegistrationResult.Error.INVALID_SYMBOLS -> showMessage(R.string.invalid_symbols_error)
+                        RegistrationResult.Error.USERNAME_COLLISION -> showMessage(R.string.username_collision_error)
+                        RegistrationResult.Error.WEAK_PASSWORD -> showMessage(R.string.weak_password_error)
+                        RegistrationResult.Error.DEFAULT -> showMessage(R.string.default_error)
+                    }
+                }
             }
-        }
-
-        viewModel.shouldShowLoader.observe(viewLifecycleOwner) { show ->
-            if (show) showLoader() else closeLoader()
         }
     }
 

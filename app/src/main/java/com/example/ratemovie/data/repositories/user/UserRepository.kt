@@ -1,20 +1,17 @@
 package com.example.ratemovie.data.repositories.user
 
-import com.example.ratemovie.domain.entities.LoginResult
-import com.example.ratemovie.domain.entities.RegistrationResult
+import com.example.ratemovie.domain.remote.LoginResult
+import com.example.ratemovie.domain.remote.RegistrationResult
 import com.example.ratemovie.domain.entities.Review
 import com.example.ratemovie.domain.entities.User
+import com.example.ratemovie.domain.remote.RemoteResult
+import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
 
-    suspend fun getUser(userId: String?): User?
+    suspend fun getUser(userId: String?): Flow<RemoteResult<User?>>
 
-    suspend fun getUsername(userId: String): String
-
-    suspend fun signIn(
-        email: String,
-        password: String
-    ): LoginResult
+    suspend fun signIn(email: String, password: String): Flow<RemoteResult<LoginResult>>
 
     fun signOut()
 
@@ -22,27 +19,13 @@ interface UserRepository {
         username: String,
         email: String,
         password: String
-    ): RegistrationResult
+    ): Flow<RemoteResult<RegistrationResult>>
 
-    suspend fun addMovieToFavorites(
-        userId: String,
-        movieId: Int
-    )
+    suspend fun addMovieToFavorites(userId: String, movieId: Int): Flow<RemoteResult<Unit>>
 
-    suspend fun deleteMovieFromFavorites(
-        userId: String,
-        movieId: Int
-    )
+    suspend fun deleteMovieFromFavorites(userId: String, movieId: Int): Flow<RemoteResult<Unit>>
 
-    suspend fun addReview(
-        review: Review,
-        userId: String,
-        movieId: Int
-    )
+    suspend fun addReview(review: Review, userId: String, movieId: Int): Flow<RemoteResult<Unit>>
 
-    suspend fun deleteReview(
-        review: Review,
-        userId: String,
-        movieId: Int
-    )
+    suspend fun deleteReview(review: Review, userId: String, movieId: Int): Flow<RemoteResult<Unit>>
 }

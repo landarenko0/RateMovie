@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.ratemovie.R
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.databinding.MoviesListFragmentBinding
+import com.example.ratemovie.domain.remote.RemoteResult
 import com.example.ratemovie.presentation.adapters.MoviesAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -47,8 +48,18 @@ class MoviesListFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.movies.observe(viewLifecycleOwner) { movies ->
-            moviesAdapter.submitList(movies)
+        viewModel.movies.observe(viewLifecycleOwner) { result ->
+            when(result) {
+                RemoteResult.Loading -> { }
+
+                is RemoteResult.Success -> {
+                    val movies = result.data
+
+                    moviesAdapter.submitList(movies)
+                }
+
+                is RemoteResult.Error -> { }
+            }
         }
     }
 

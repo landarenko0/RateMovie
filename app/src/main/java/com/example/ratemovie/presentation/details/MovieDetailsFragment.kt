@@ -13,6 +13,7 @@ import com.example.ratemovie.R
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.domain.entities.Review
 import com.example.ratemovie.databinding.MovieDetailsFragmentBinding
+import com.example.ratemovie.domain.remote.RemoteResult
 import com.example.ratemovie.domain.utils.Globals
 import com.example.ratemovie.presentation.loader.LoaderDialogFragment
 import com.example.ratemovie.presentation.adapters.ReviewsAdapter
@@ -48,9 +49,9 @@ class MovieDetailsFragment : Fragment() {
         viewModel.updateData()
 
         checkUserIsNotNull()
-        setupMovieInfo(args.movie)
+        setupMovieInfo()
         setupRecyclerView()
-        setupOnClickListeners(viewModel.userReview.value, args.movie)
+        setupOnClickListeners()
         observeViewModel()
     }
 
@@ -68,7 +69,9 @@ class MovieDetailsFragment : Fragment() {
         }
     }
 
-    private fun setupMovieInfo(movie: Movie) {
+    private fun setupMovieInfo() {
+        val movie = args.movie
+
         with(binding) {
             ivMoviePoster.load(movie.posterUrl?.url)
             tvMovieTitle.text = movie.title
@@ -78,13 +81,8 @@ class MovieDetailsFragment : Fragment() {
         }
     }
 
-    private fun setupOnClickListeners(review: Review?, movie: Movie) {
-        binding.ibEditReview.setOnClickListener {
-            showReviewFragment(
-                review = review,
-                movie = movie
-            )
-        }
+    private fun setupOnClickListeners() {
+        val movie = args.movie
 
         binding.ibFavorite.setOnClickListener { viewModel.onFavoriteButtonClicked(movie.id) }
     }
@@ -94,26 +92,58 @@ class MovieDetailsFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.reviews.observe(viewLifecycleOwner) { reviews ->
-            with(binding) {
-                if (reviews.isEmpty()) {
-                    tvReviewsCount.text = getString(R.string.no_reviews)
-                    tvReviews.visibility = View.GONE
-                } else {
-                    reviewsAdapter.submitList(reviews)
-                    tvReviewsCount.text = getString(R.string.reviewsCount, reviews.size)
-                    tvReviews.visibility = View.VISIBLE
+        viewModel.reviews.observe(viewLifecycleOwner) { result ->
+            when(result) {
+                RemoteResult.Loading -> { showLoader() }
+
+                is RemoteResult.Success -> {
+                    val reviews = result.data
+
+                    with(binding) {
+                        if (reviews.isEmpty()) {
+                            tvReviewsCount.text = getString(R.string.no_reviews)
+                            tvReviews.visibility = View.GONE
+                        } else {
+                            reviewsAdapter.submitList(reviews)
+                            tvReviewsCount.text = getString(R.string.reviewsCount, reviews.size)
+                            tvReviews.visibility = View.VISIBLE
+                        }
+                    }
+
+                    closeLoader()
                 }
+
+                is RemoteResult.Error -> { closeLoader() }
             }
         }
 
-        viewModel.userReview.observe(viewLifecycleOwner) { review ->
-            if (Globals.User != null) {
-                if (review != null) {
-                    binding.ibEditReview.setImageResource(R.drawable.ic_edit_24)
-                } else {
-                    binding.ibEditReview.setImageResource(R.drawable.ic_add_24)
+        viewModel.userReview.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                RemoteResult.Loading -> { showLoader() }
+
+                is RemoteResult.Success -> {
+                    val review = result.data
+                    val movie = args.movie
+
+                    binding.ibEditReview.setOnClickListener {
+                        showReviewFragment(
+                            review = review,
+                            movie = movie
+                        )
+                    }
+
+                    if (Globals.User != null) {
+                        if (review != null) {
+                            binding.ibEditReview.setImageResource(R.drawable.ic_edit_24)
+                        } else {
+                            binding.ibEditReview.setImageResource(R.drawable.ic_add_24)
+                        }
+                    }
+
+                    closeLoader()
                 }
+
+                is RemoteResult.Error -> { closeLoader() }
             }
         }
 
@@ -123,10 +153,6 @@ class MovieDetailsFragment : Fragment() {
             } else {
                 binding.ibFavorite.setImageResource(R.drawable.ic_favorite_24)
             }
-        }
-
-        viewModel.shouldShowLoader.observe(viewLifecycleOwner) { show ->
-            if (show) showLoader() else closeLoader()
         }
     }
 

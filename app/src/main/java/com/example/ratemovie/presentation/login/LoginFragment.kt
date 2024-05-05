@@ -10,7 +10,8 @@ import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.ratemovie.R
 import com.example.ratemovie.databinding.LoginFragmentBinding
-import com.example.ratemovie.domain.entities.LoginResult
+import com.example.ratemovie.domain.remote.LoginResult
+import com.example.ratemovie.domain.remote.RemoteResult
 import com.example.ratemovie.presentation.loader.LoaderDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -47,16 +48,22 @@ class LoginFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.loginResult.observe(viewLifecycleOwner) { result ->
             when (result) {
-                is LoginResult.Success -> closeFragment()
+                is RemoteResult.Loading -> showLoader()
+                is RemoteResult.Success -> {
+                    closeLoader()
+                    closeFragment()
+                }
 
-                LoginResult.Error.EmptyFields -> showMessage(R.string.empty_fields_error)
-                LoginResult.Error.InvalidCredentials -> showMessage(R.string.invalid_data_error)
-                LoginResult.Error.Default -> showMessage(R.string.default_error)
+                is RemoteResult.Error -> {
+                    closeLoader()
+
+                    when (result.message) {
+                        LoginResult.Error.EMPTY_FIELDS -> showMessage(R.string.empty_fields_error)
+                        LoginResult.Error.INVALID_CREDENTIALS -> showMessage(R.string.invalid_data_error)
+                        LoginResult.Error.DEFAULT -> showMessage(R.string.default_error)
+                    }
+                }
             }
-        }
-
-        viewModel.shouldShowLoader.observe(viewLifecycleOwner) { showLoader ->
-            if (showLoader) showLoader() else closeLoader()
         }
     }
 

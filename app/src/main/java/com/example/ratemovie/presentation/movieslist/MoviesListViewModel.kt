@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ratemovie.domain.usecases.GetNewMoviesListUseCase
 import com.example.ratemovie.domain.entities.Movie
+import com.example.ratemovie.domain.remote.RemoteResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,12 +16,14 @@ class MoviesListViewModel @Inject constructor(
     private val getNewMoviesListUseCase: GetNewMoviesListUseCase
 ) : ViewModel() {
 
-    private val _movies = MutableLiveData<List<Movie>>()
-    val movies: LiveData<List<Movie>> = _movies
+    private val _movies = MutableLiveData<RemoteResult<List<Movie>>>()
+    val movies: LiveData<RemoteResult<List<Movie>>> = _movies
 
     init {
         viewModelScope.launch {
-            _movies.value = getNewMoviesListUseCase()
+            getNewMoviesListUseCase().collect {
+                _movies.value = it
+            }
         }
     }
 }

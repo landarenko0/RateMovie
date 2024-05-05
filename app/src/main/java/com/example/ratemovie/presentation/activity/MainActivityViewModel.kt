@@ -2,6 +2,7 @@ package com.example.ratemovie.presentation.activity
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.ratemovie.domain.remote.RemoteResult
 import com.example.ratemovie.domain.usecases.GetUserUseCase
 import com.example.ratemovie.domain.utils.Globals
 import com.google.firebase.auth.FirebaseAuth
@@ -21,7 +22,11 @@ class MainActivityViewModel @Inject constructor(
             ?.uid
 
         viewModelScope.launch {
-            Globals.User = getUserUseCase(userId)
+            getUserUseCase(userId).collect {
+                if (it is RemoteResult.Success) {
+                    Globals.User = it.data
+                }
+            }
         }
     }
 }
