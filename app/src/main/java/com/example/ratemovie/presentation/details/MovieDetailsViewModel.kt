@@ -37,6 +37,9 @@ class MovieDetailsViewModel @AssistedInject constructor(
     private val _userReview = MutableLiveData<RemoteResult<Review?>>()
     val userReview: LiveData<RemoteResult<Review?>> get() = _userReview
 
+    private val _updateDataResult = MutableLiveData<Boolean>()
+    val updateDataResult: LiveData<Boolean> = _updateDataResult
+
     private suspend fun getMovieReviews(movieId: Int) {
         getMovieReviewsUseCase(movieId).collect {
             _reviews.value = it
@@ -85,6 +88,8 @@ class MovieDetailsViewModel @AssistedInject constructor(
 
     fun updateData() {
         viewModelScope.launch {
+            _updateDataResult.value = true
+
             getMovieReviews(movieId)
 
             val user = Globals.User
@@ -93,6 +98,8 @@ class MovieDetailsViewModel @AssistedInject constructor(
                 checkUserLikesMovie()
                 getUserReview(user.id, movieId)
             }
+
+            _updateDataResult.value = false
         }
     }
 

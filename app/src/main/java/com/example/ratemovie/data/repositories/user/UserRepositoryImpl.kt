@@ -131,7 +131,7 @@ class UserRepositoryImpl : UserRepository {
         }
 
         emit(RemoteResult.Success(RegistrationResult.Success(user)))
-    }
+    }.flowOn(Dispatchers.IO)
 
     override suspend fun addMovieToFavorites(userId: String, movieId: Int) = flow {
         emit(RemoteResult.Loading)

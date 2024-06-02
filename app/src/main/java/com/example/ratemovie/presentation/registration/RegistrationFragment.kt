@@ -53,7 +53,7 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.loginResult.observe(viewLifecycleOwner) { result ->
+        viewModel.registrationResult.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is RemoteResult.Loading -> showLoader()
                 is RemoteResult.Success -> {

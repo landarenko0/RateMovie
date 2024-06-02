@@ -94,7 +94,7 @@ class MovieDetailsFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.reviews.observe(viewLifecycleOwner) { result ->
             when(result) {
-                RemoteResult.Loading -> { showLoader() }
+                RemoteResult.Loading -> { }
 
                 is RemoteResult.Success -> {
                     val reviews = result.data
@@ -109,17 +109,15 @@ class MovieDetailsFragment : Fragment() {
                             tvReviews.visibility = View.VISIBLE
                         }
                     }
-
-                    closeLoader()
                 }
 
-                is RemoteResult.Error -> { closeLoader() }
+                is RemoteResult.Error -> { }
             }
         }
 
         viewModel.userReview.observe(viewLifecycleOwner) { result ->
             when (result) {
-                RemoteResult.Loading -> { showLoader() }
+                RemoteResult.Loading -> { }
 
                 is RemoteResult.Success -> {
                     val review = result.data
@@ -139,12 +137,14 @@ class MovieDetailsFragment : Fragment() {
                             binding.ibEditReview.setImageResource(R.drawable.ic_add_24)
                         }
                     }
-
-                    closeLoader()
                 }
 
-                is RemoteResult.Error -> { closeLoader() }
+                is RemoteResult.Error -> { }
             }
+        }
+
+        viewModel.updateDataResult.observe(viewLifecycleOwner) {
+            if (it) showLoader() else closeLoader()
         }
 
         viewModel.isFavorite.observe(viewLifecycleOwner) { movieIsFavorite ->

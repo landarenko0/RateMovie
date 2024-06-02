@@ -15,26 +15,23 @@ class MoviesListRepositoryImpl @Inject constructor(
     private val service: MoviesApiService
 ) : MoviesListRepository {
 
-    override suspend fun getNewMoviesList(): Flow<RemoteResult<List<Movie>>> {
-        return getMoviesBy { service.searchNewMovies() }
-    }
+    override suspend fun getNewMoviesList(): Flow<RemoteResult<List<Movie>>> =
+        getMoviesBy { service.searchNewMovies() }
 
-    override suspend fun searchMoviesByName(name: String): Flow<RemoteResult<List<Movie>>> {
-        return getMoviesBy { service.searchMoviesByKeywords(name) }
-    }
+    override suspend fun searchMoviesByName(name: String): Flow<RemoteResult<List<Movie>>> =
+        getMoviesBy { service.searchMoviesByKeywords(name) }
 
-    override suspend fun getMoviesByIds(ids: List<String>): Flow<RemoteResult<List<Movie>>> {
-        return getMoviesBy { service.getMoviesByIds(ids) }
-    }
+    override suspend fun getMoviesByIds(ids: List<String>): Flow<RemoteResult<List<Movie>>> =
+        getMoviesBy { service.getMoviesByIds(ids) }
 
     private suspend fun getMoviesBy(
-        action: suspend () -> Response<ApiResponse>
+        getMovies: suspend () -> Response<ApiResponse>
     ): Flow<RemoteResult<List<Movie>>> =
         flow {
             emit(RemoteResult.Loading)
 
             try {
-                val response = action()
+                val response = getMovies()
 
                 when {
                     response.isSuccessful && response.body() is ApiResponse -> {
