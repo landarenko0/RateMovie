@@ -42,7 +42,6 @@ class AccountFragment : Fragment() {
         checkUserIsNotNull()
         setupRecyclerViews()
         setupButtons()
-        setupRadioButtons()
         observeViewModel()
     }
 
@@ -66,24 +65,6 @@ class AccountFragment : Fragment() {
                 tvEmail.visibility = View.GONE
                 btnSignOut.visibility = View.GONE
                 btnSignIn.visibility = View.VISIBLE
-            }
-        }
-    }
-
-    private fun setupRadioButtons() {
-        binding.rbLightTheme.isChecked = true
-        binding.rgRadioButtons.setOnCheckedChangeListener { _, id ->
-            // TODO: Смена темы
-            when (id) {
-                binding.rbLightTheme.id -> {
-                    //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                }
-
-                binding.rbDarkTheme.id -> {
-                    //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                }
-
-                else -> throw IllegalStateException("Unknown radio button id $id")
             }
         }
     }
