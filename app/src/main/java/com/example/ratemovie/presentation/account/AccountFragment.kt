@@ -73,6 +73,11 @@ class AccountFragment : Fragment() {
         with(binding) {
             btnSignOut.setOnClickListener {
                 viewModel.signOut()
+
+                tvUsername.text = getString(R.string.unauthorized)
+                tvEmail.visibility = View.GONE
+                btnSignIn.visibility = View.VISIBLE
+                btnSignOut.visibility = View.GONE
             }
 
             btnSignIn.setOnClickListener {
