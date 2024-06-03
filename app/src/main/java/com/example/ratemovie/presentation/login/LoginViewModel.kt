@@ -28,7 +28,7 @@ class LoginViewModel @Inject constructor(
                 if (it is RemoteResult.Success) {
                     val result = it.data
 
-                    if (result is LoginResult.Success) Globals.User = result.user
+                    if (result is LoginResult.Success) Globals.User.value = result.user
                 }
             }
         }

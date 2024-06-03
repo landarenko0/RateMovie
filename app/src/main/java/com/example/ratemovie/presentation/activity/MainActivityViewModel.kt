@@ -24,7 +24,7 @@ class MainActivityViewModel @Inject constructor(
         viewModelScope.launch {
             getUserUseCase(userId).collect {
                 if (it is RemoteResult.Success) {
-                    Globals.User = it.data
+                    Globals.User.value = it.data
                 }
             }
         }

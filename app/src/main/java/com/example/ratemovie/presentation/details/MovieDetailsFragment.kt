@@ -14,7 +14,7 @@ import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.domain.entities.Review
 import com.example.ratemovie.databinding.MovieDetailsFragmentBinding
 import com.example.ratemovie.domain.remote.RemoteResult
-import com.example.ratemovie.domain.utils.Globals
+import com.example.ratemovie.domain.utils.Globals.User
 import com.example.ratemovie.presentation.loader.LoaderDialogFragment
 import com.example.ratemovie.presentation.adapters.ReviewsAdapter
 
@@ -48,25 +48,10 @@ class MovieDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.updateData()
 
-        checkUserIsNotNull()
         setupMovieInfo()
         setupRecyclerView()
         setupOnClickListeners()
         observeViewModel()
-    }
-
-    private fun checkUserIsNotNull() {
-        val user = Globals.User
-
-        with(binding) {
-            if (user != null) {
-                ibFavorite.visibility = View.VISIBLE
-                ibEditReview.visibility = View.VISIBLE
-            } else {
-                ibFavorite.visibility = View.GONE
-                ibEditReview.visibility = View.GONE
-            }
-        }
     }
 
     private fun setupMovieInfo() {
@@ -92,6 +77,15 @@ class MovieDetailsFragment : Fragment() {
     }
 
     private fun observeViewModel() {
+        User.observe(viewLifecycleOwner) { user ->
+            val visibility = if (user == null) View.GONE else View.VISIBLE
+
+            with(binding) {
+                ibFavorite.visibility = visibility
+                ibEditReview.visibility = visibility
+            }
+        }
+
         viewModel.reviews.observe(viewLifecycleOwner) { result ->
             when(result) {
                 RemoteResult.Loading -> { }
@@ -130,12 +124,10 @@ class MovieDetailsFragment : Fragment() {
                         )
                     }
 
-                    if (Globals.User != null) {
-                        if (review != null) {
-                            binding.ibEditReview.setImageResource(R.drawable.ic_edit_24)
-                        } else {
-                            binding.ibEditReview.setImageResource(R.drawable.ic_add_24)
-                        }
+                    if (review != null) {
+                        binding.ibEditReview.setImageResource(R.drawable.ic_edit_24)
+                    } else {
+                        binding.ibEditReview.setImageResource(R.drawable.ic_add_24)
                     }
                 }
 

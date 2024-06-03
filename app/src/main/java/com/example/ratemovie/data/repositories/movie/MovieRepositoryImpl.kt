@@ -42,7 +42,7 @@ class MovieRepositoryImpl : MovieRepository {
         }.flowOn(Dispatchers.IO)
 
     override fun checkUserLikesMovie(movieId: Int): Boolean {
-        return Globals.User?.liked?.any { it == movieId.toString() }
+        return Globals.User.value?.liked?.any { it == movieId.toString() }
             ?: throw RuntimeException("User was null while checking")
     }
 

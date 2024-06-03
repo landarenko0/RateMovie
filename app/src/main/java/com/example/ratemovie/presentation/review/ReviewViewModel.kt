@@ -8,7 +8,7 @@ import com.example.ratemovie.domain.entities.Review
 import com.example.ratemovie.domain.remote.RemoteResult
 import com.example.ratemovie.domain.usecases.AddReviewUseCase
 import com.example.ratemovie.domain.usecases.DeleteReviewUseCase
-import com.example.ratemovie.domain.utils.Globals
+import com.example.ratemovie.domain.utils.Globals.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,8 +28,8 @@ class ReviewViewModel @Inject constructor(
         grade: Int,
         movieId: Int
     ) {
-        val userId = Globals.User?.id ?: return
-        val username = Globals.User!!.username
+        val userId = User.value?.id ?: return
+        val username = User.value!!.username
         val review = Review(reviewText, grade, username)
 
         viewModelScope.launch {
@@ -37,21 +37,21 @@ class ReviewViewModel @Inject constructor(
                 _result.value = it
 
                 if (it is RemoteResult.Success) {
-                    Globals.User?.addMovieToReviewed(movieId.toString())
+                    User.value!!.addMovieToReviewed(movieId.toString())
                 }
             }
         }
     }
 
     fun deleteReview(review: Review, movieId: Int) {
-        val userId = Globals.User?.id ?: return
+        val userId = User.value?.id ?: return
 
         viewModelScope.launch {
             deleteReviewUseCase(review, userId, movieId).collect {
                 _result.value = it
 
                 if (it is RemoteResult.Success) {
-                    Globals.User?.deleteMovieFromReviewed(movieId.toString())
+                    User.value!!.deleteMovieFromReviewed(movieId.toString())
                 }
             }
         }

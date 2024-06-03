@@ -11,7 +11,7 @@ import com.example.ratemovie.R
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.databinding.AccountFragmentBinding
 import com.example.ratemovie.domain.remote.RemoteResult
-import com.example.ratemovie.domain.utils.Globals
+import com.example.ratemovie.domain.utils.Globals.User
 import com.example.ratemovie.presentation.adapters.MoviesAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -39,34 +39,9 @@ class AccountFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        checkUserIsNotNull()
         setupRecyclerViews()
         setupButtons()
         observeViewModel()
-    }
-
-    private fun checkUserIsNotNull() {
-        val user = Globals.User
-
-        with(binding) {
-            if (user != null) {
-                tvUsername.text = user.username
-                tvEmail.text = user.email
-
-                viewModel.getUserLikedMovies(user.liked)
-                viewModel.getUserReviewedMovies(user.reviewed)
-
-                btnSignOut.visibility = View.VISIBLE
-                btnSignIn.visibility = View.GONE
-            }
-            else {
-                tvUsername.text = getString(R.string.unauthorized)
-
-                tvEmail.visibility = View.GONE
-                btnSignOut.visibility = View.GONE
-                btnSignIn.visibility = View.VISIBLE
-            }
-        }
     }
 
     private fun setupButtons() {
@@ -97,6 +72,28 @@ class AccountFragment : Fragment() {
     }
 
     private fun observeViewModel() {
+        User.observe(viewLifecycleOwner) { user ->
+            with(binding) {
+                if (user == null) {
+                    tvUsername.text = getString(R.string.unauthorized)
+
+                    tvEmail.visibility = View.GONE
+                    btnSignOut.visibility = View.GONE
+                    btnSignIn.visibility = View.VISIBLE
+                } else {
+                    tvUsername.text = user.username
+                    tvEmail.text = user.email
+                    tvEmail.visibility = View.VISIBLE
+
+                    viewModel.getUserLikedMovies(user.liked)
+                    viewModel.getUserReviewedMovies(user.reviewed)
+
+                    btnSignOut.visibility = View.VISIBLE
+                    btnSignIn.visibility = View.GONE
+                }
+            }
+        }
+
         viewModel.likedMovies.observe(viewLifecycleOwner) { result ->
             when(result) {
                 RemoteResult.Loading -> { }

@@ -1,8 +1,9 @@
 package com.example.ratemovie.domain.utils
 
+import androidx.lifecycle.MutableLiveData
 import com.example.ratemovie.domain.entities.User
 
 object Globals {
 
-    var User: User? = null
+    val User: MutableLiveData<User?> = MutableLiveData(null)
 }

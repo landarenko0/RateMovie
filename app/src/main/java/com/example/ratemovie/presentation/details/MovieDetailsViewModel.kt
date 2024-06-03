@@ -11,7 +11,7 @@ import com.example.ratemovie.domain.usecases.GetMovieReviewsUseCase
 import com.example.ratemovie.domain.usecases.GetUserReviewUseCase
 import com.example.ratemovie.domain.entities.Review
 import com.example.ratemovie.domain.remote.RemoteResult
-import com.example.ratemovie.domain.utils.Globals
+import com.example.ratemovie.domain.utils.Globals.User
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -67,21 +67,21 @@ class MovieDetailsViewModel @AssistedInject constructor(
     }
 
     private fun addToFavorites(movieId: Int) {
-        val userId = Globals.User?.id ?: return
+        val userId = User.value?.id ?: return
 
         viewModelScope.launch {
             addMovieToFavoritesUseCase(userId, movieId)
-            Globals.User?.addMovieToFavorites(movieId.toString())
+            User.value?.addMovieToFavorites(movieId.toString())
             _isFavorite.value = true
         }
     }
 
     private fun deleteFromFavorites(movieId: Int) {
-        val userId = Globals.User?.id ?: return
+        val userId = User.value?.id ?: return
 
         viewModelScope.launch {
             deleteMovieFromFavoritesUseCase(userId, movieId)
-            Globals.User?.deleteMovieFromFavorites(movieId.toString())
+            User.value?.deleteMovieFromFavorites(movieId.toString())
             _isFavorite.value = false
         }
     }
@@ -92,11 +92,9 @@ class MovieDetailsViewModel @AssistedInject constructor(
 
             getMovieReviews(movieId)
 
-            val user = Globals.User
-
-            if (user != null) {
+            if (User.value != null) {
                 checkUserLikesMovie()
-                getUserReview(user.id, movieId)
+                getUserReview(User.value!!.id, movieId)
             }
 
             _updateDataResult.value = false

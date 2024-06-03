@@ -80,7 +80,7 @@ class UserRepositoryImpl : UserRepository {
 
     override fun signOut() {
         FirebaseAuth.getInstance().signOut()
-        Globals.User = null
+        Globals.User.value = null
     }
 
     override suspend fun signUp(username: String, email: String, password: String) = flow {

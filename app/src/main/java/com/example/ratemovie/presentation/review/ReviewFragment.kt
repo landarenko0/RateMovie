@@ -14,7 +14,7 @@ import com.example.ratemovie.databinding.ReviewFragmentBinding
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.domain.entities.Review
 import com.example.ratemovie.domain.remote.RemoteResult
-import com.example.ratemovie.domain.utils.Globals
+import com.example.ratemovie.domain.utils.Globals.User
 import com.example.ratemovie.presentation.loader.LoaderDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -48,14 +48,9 @@ class ReviewFragment : Fragment() {
         val review = args.review
         val movie = args.movie
 
-        checkUserIsNotNull()
         setInfo(review, movie)
         setOnClickListener(review, movie)
         observeViewModel()
-    }
-
-    private fun checkUserIsNotNull() {
-        if (Globals.User == null) closeFragment()
     }
 
     private fun setInfo(review: Review?, movie: Movie) {
@@ -85,6 +80,8 @@ class ReviewFragment : Fragment() {
     }
 
     private fun observeViewModel() {
+        User.observe(viewLifecycleOwner) { if (it == null) closeFragment() }
+
         viewModel.result.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is RemoteResult.Loading -> showLoader()
