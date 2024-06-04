@@ -8,27 +8,62 @@ import com.example.ratemovie.domain.entities.Review
 import com.example.ratemovie.domain.remote.RemoteResult
 import com.example.ratemovie.domain.usecases.AddReviewUseCase
 import com.example.ratemovie.domain.usecases.DeleteReviewUseCase
+import com.example.ratemovie.domain.usecases.GetUserReviewUseCase
 import com.example.ratemovie.domain.utils.Globals.User
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class ReviewViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = ReviewViewModel.Factory::class)
+class ReviewViewModel @AssistedInject constructor(
+    @Assisted private val movieId: Int,
     private val addReviewUseCase: AddReviewUseCase,
-    private val deleteReviewUseCase: DeleteReviewUseCase
+    private val deleteReviewUseCase: DeleteReviewUseCase,
+    private val getUserReviewUseCase: GetUserReviewUseCase
 
 ) : ViewModel() {
 
-    private val _result = MutableLiveData<RemoteResult<Unit>>()
-    val result: LiveData<RemoteResult<Unit>> = _result
+    private val _userReview = MutableLiveData<RemoteResult<Review?>>(RemoteResult.Success(null))
+    val userReview: LiveData<RemoteResult<Review?>> = _userReview
+
+    private val _result = MutableLiveData<RemoteResult<Boolean?>>()
+    val result: LiveData<RemoteResult<Boolean?>> = _result
+
+    private val _symbolsLeft = MutableLiveData(MAX_TEXT_LENGTH)
+    val symbolsLeft: LiveData<Int> = _symbolsLeft
+
+    init {
+        checkUserReview()
+    }
+
+    private fun checkUserReview() {
+        if (User.value == null) return
+
+        val userLeftReview = movieId.toString() in User.value!!.reviewed
+
+        if (userLeftReview) {
+            val userId = User.value!!.id
+
+            viewModelScope.launch {
+                getUserReviewUseCase(userId, movieId).collect {
+                    _userReview.value = it
+                }
+            }
+        }
+    }
 
     fun saveReview(
         reviewText: String,
-        grade: Int,
-        movieId: Int
+        grade: Int
     ) {
-        val userId = User.value?.id ?: return
+        if (grade < 1) {
+            _result.value = RemoteResult.Error("Оценка не может быть меньше 1")
+            return
+        }
+
+        val userId = User.value?.id ?: throw RuntimeException("User in null")
         val username = User.value!!.username
         val review = Review(reviewText, grade, username)
 
@@ -43,11 +78,12 @@ class ReviewViewModel @Inject constructor(
         }
     }
 
-    fun deleteReview(review: Review, movieId: Int) {
-        val userId = User.value?.id ?: return
+    fun deleteReview() {
+        val userId = User.value?.id ?: throw RuntimeException("User in null")
 
         viewModelScope.launch {
-            deleteReviewUseCase(review, userId, movieId).collect {
+            val review = _userReview.value as RemoteResult.Success
+            deleteReviewUseCase(review.data!!, userId, movieId).collect {
                 _result.value = it
 
                 if (it is RemoteResult.Success) {
@@ -55,5 +91,18 @@ class ReviewViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun onReviewTextChanged(text: CharSequence) {
+        _symbolsLeft.value = MAX_TEXT_LENGTH - text.length
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun build(movieId: Int): ReviewViewModel
+    }
+
+    companion object {
+        private const val MAX_TEXT_LENGTH = 1000
     }
 }

@@ -1,6 +1,8 @@
 package com.example.ratemovie.presentation.review
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +13,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.ratemovie.R
 import com.example.ratemovie.databinding.ReviewFragmentBinding
-import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.domain.entities.Review
 import com.example.ratemovie.domain.remote.RemoteResult
 import com.example.ratemovie.domain.utils.Globals.User
+import com.example.ratemovie.presentation.details.MovieDetailsViewModel
 import com.example.ratemovie.presentation.loader.LoaderDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,7 +27,13 @@ class ReviewFragment : Fragment() {
     private val binding
         get() = _binding ?: throw RuntimeException("ReviewFragmentBinding was null")
 
-    private val viewModel: ReviewViewModel by hiltNavGraphViewModels(R.id.reviewFragment)
+    private val args: ReviewFragmentArgs by navArgs()
+
+    private val viewModel: ReviewViewModel by hiltNavGraphViewModels(R.id.reviewFragment) { factory: ReviewViewModel.Factory ->
+        factory.build(args.movie.id)
+    }
+
+    private val movieDetailsViewModel: MovieDetailsViewModel by hiltNavGraphViewModels(R.id.movieDetailsFragment)
 
     private val reviewText get() = binding.etReviewText.text.toString()
     private val grade get() = binding.rbRating.rating.toInt()
@@ -44,59 +52,91 @@ class ReviewFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val args: ReviewFragmentArgs by navArgs()
-        val review = args.review
-        val movie = args.movie
+        super.onViewCreated(view, savedInstanceState)
 
-        setInfo(review, movie)
-        setOnClickListener(review, movie)
-        observeViewModel()
+        setMovieInfo()
+        setListeners()
+        observeLiveData()
     }
 
-    private fun setInfo(review: Review?, movie: Movie) {
-        with(binding) {
-            etReviewText.setText(review?.text)
-
-            if (review != null) {
-                rbRating.rating = review.grade.toFloat()
-            } else {
-                btnDeleteReview.visibility = View.GONE
-            }
-
-            tvMovieTitle.text = movie.title
-        }
+    private fun setMovieInfo() {
+        binding.tvMovieTitle.text = args.movie.title
     }
 
-    private fun setOnClickListener(review: Review?, movie: Movie) {
+    private fun setListeners() {
         binding.btnSaveReview.setOnClickListener {
-            viewModel.saveReview(reviewText, grade, movie.id)
+            viewModel.saveReview(reviewText, grade)
         }
 
-        if (review != null) {
-            binding.btnDeleteReview.setOnClickListener {
-                viewModel.deleteReview(review, movie.id)
-            }
+        binding.btnDeleteReview.setOnClickListener {
+            viewModel.deleteReview()
         }
+
+        binding.etReviewText.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                s?.let{ viewModel.onReviewTextChanged(s) }
+            }
+
+            override fun afterTextChanged(s: Editable?) { }
+        })
     }
 
-    private fun observeViewModel() {
+    private fun observeLiveData() {
         User.observe(viewLifecycleOwner) { if (it == null) closeFragment() }
 
-        viewModel.result.observe(viewLifecycleOwner) { result ->
+        viewModel.userReview.observe(viewLifecycleOwner) { result ->
             when (result) {
-                is RemoteResult.Loading -> showLoader()
+                RemoteResult.Loading -> showLoader()
                 is RemoteResult.Success -> {
-                    closeLoader()
-                    closeFragment()
+                    if (result.data != null) {
+                        setupUserReview(result.data)
+                        closeLoader()
+                    }
                 }
 
                 is RemoteResult.Error -> {
                     closeLoader()
-
-                    Toast.makeText(context, R.string.default_error, Toast.LENGTH_SHORT).show()
+                    showMessage(getString(R.string.request_failed))
                 }
             }
         }
+
+        viewModel.result.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                RemoteResult.Loading -> showLoader()
+                is RemoteResult.Success -> {
+                    if (result.data != null) {
+                        closeLoader()
+                        closeFragment()
+                        movieDetailsViewModel.updateData()
+                    }
+                }
+
+                is RemoteResult.Error -> {
+                    closeLoader()
+                    showMessage(result.message)
+                }
+            }
+        }
+
+        viewModel.symbolsLeft.observe(viewLifecycleOwner) { symbolsLeft ->
+            binding.tvSymbolsLeft.text = getString(R.string.symbols_left, symbolsLeft)
+        }
+    }
+
+    private fun setupUserReview(review: Review) {
+        with(binding) {
+            rbRating.rating = review.grade.toFloat()
+            etReviewText.setText(review.text)
+        }
+
+        binding.btnDeleteReview.visibility = View.VISIBLE
+    }
+
+    private fun showMessage(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
     private fun showLoader() {
