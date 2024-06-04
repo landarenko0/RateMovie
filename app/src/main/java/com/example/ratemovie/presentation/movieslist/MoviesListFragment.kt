@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
@@ -53,12 +54,12 @@ class MoviesListFragment : Fragment() {
                 RemoteResult.Loading -> { }
 
                 is RemoteResult.Success -> {
-                    val movies = result.data
-
-                    moviesAdapter.submitList(movies)
+                    if (result.data != null) {
+                        moviesAdapter.submitList(result.data)
+                    }
                 }
 
-                is RemoteResult.Error -> { }
+                is RemoteResult.Error -> showToast(getString(R.string.request_failed))
             }
         }
     }
@@ -68,6 +69,10 @@ class MoviesListFragment : Fragment() {
             MoviesListFragmentDirections.actionMoviesListFragmentToMovieDetailsFragment(movie)
 
         findNavController().navigate(action)
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

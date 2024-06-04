@@ -16,8 +16,8 @@ class MoviesListViewModel @Inject constructor(
     private val getNewMoviesListUseCase: GetNewMoviesListUseCase
 ) : ViewModel() {
 
-    private val _movies = MutableLiveData<RemoteResult<List<Movie>>>()
-    val movies: LiveData<RemoteResult<List<Movie>>> = _movies
+    private val _movies = MutableLiveData<RemoteResult<List<Movie>?>>()
+    val movies: LiveData<RemoteResult<List<Movie>?>> = _movies
 
     init {
         viewModelScope.launch {
