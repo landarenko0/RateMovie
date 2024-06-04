@@ -42,7 +42,7 @@ class SearchFragment : Fragment() {
 
         setupRecyclerView()
         setOnQueryTextListener()
-        observeViewModel()
+        observeLiveData()
     }
 
     private fun setupRecyclerView() {
@@ -74,23 +74,25 @@ class SearchFragment : Fragment() {
         })
     }
 
-    private fun observeViewModel() {
+    private fun observeLiveData() {
         viewModel.movies.observe(viewLifecycleOwner) { result ->
             when(result) {
                 RemoteResult.Loading -> { }
 
                 is RemoteResult.Success -> {
-                    val movies = result.data
+                    if (result.data != null) {
+                        val movies = result.data
 
-                    if (movies.isNotEmpty()) {
-                        binding.tvEmptyMoviesList.visibility = View.GONE
-                    }
-                    else {
-                        binding.tvEmptyMoviesList.visibility = View.VISIBLE
-                        binding.tvEmptyMoviesList.text = getText(R.string.no_search_result)
-                    }
+                        if (movies.isNotEmpty()) {
+                            binding.tvEmptyMoviesList.visibility = View.GONE
+                        }
+                        else {
+                            binding.tvEmptyMoviesList.visibility = View.VISIBLE
+                            binding.tvEmptyMoviesList.text = getText(R.string.no_search_result)
+                        }
 
-                    moviesAdapter.submitList(movies)
+                        moviesAdapter.submitList(movies)
+                    }
                 }
 
                 is RemoteResult.Error -> { }

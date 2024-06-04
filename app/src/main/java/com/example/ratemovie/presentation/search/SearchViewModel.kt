@@ -18,8 +18,8 @@ class SearchViewModel @Inject constructor(
     private val searchMoviesByNameUseCase: SearchMoviesByNameUseCase
 ) : ViewModel() {
 
-    private val _movies = MutableLiveData<RemoteResult<List<Movie>>>()
-    val movies: LiveData<RemoteResult<List<Movie>>> get() = _movies
+    private val _movies = MutableLiveData<RemoteResult<List<Movie>?>>()
+    val movies: LiveData<RemoteResult<List<Movie>?>> get() = _movies
 
     private var searchJob: Job? = null
 
