@@ -31,16 +31,8 @@ class MovieDetailsViewModel @AssistedInject constructor(
     private val _isFavorite = MutableLiveData<RemoteResult<Boolean?>>(RemoteResult.Success(null))
     val isFavorite: LiveData<RemoteResult<Boolean?>> = _isFavorite
 
-    val isReviewed = User.value?.reviewed?.contains(movieId.toString())
-
     init {
-        viewModelScope.launch {
-            getMovieReviews()
-
-            if (User.value != null) {
-                _isFavorite.value = RemoteResult.Success(movieId.toString() in User.value!!.liked)
-            }
-        }
+        updateData()
     }
 
     private suspend fun getMovieReviews() {
@@ -77,6 +69,16 @@ class MovieDetailsViewModel @AssistedInject constructor(
             }
 
             User.value!!.deleteMovieFromFavorites(movieId.toString())
+        }
+    }
+
+    fun updateData() {
+        viewModelScope.launch {
+            getMovieReviews()
+
+            if (User.value != null) {
+                _isFavorite.value = RemoteResult.Success(movieId.toString() in User.value!!.liked)
+            }
         }
     }
 

@@ -68,7 +68,8 @@ class MovieDetailsFragment : Fragment() {
     }
 
     private fun checkUserLeftReview() {
-        val image = if (viewModel.isReviewed == true) R.drawable.ic_edit_24 else R.drawable.ic_add_24
+        val userLeftReview = User.value?.reviewed?.contains(args.movie.id.toString())
+        val image = if (userLeftReview == true) R.drawable.ic_edit_24 else R.drawable.ic_add_24
         binding.ibEditReview.setImageResource(image)
     }
 
