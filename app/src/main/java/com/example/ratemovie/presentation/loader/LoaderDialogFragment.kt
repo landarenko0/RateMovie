@@ -27,6 +27,6 @@ class LoaderDialogFragment : DialogFragment() {
     }
 
     companion object {
-        private const val DIALOG_WIDTH = 210
+        private const val DIALOG_WIDTH = 225
     }
 }
