@@ -34,11 +34,6 @@
         android:label="review_fragment"
         tools:layout="@layout/review_fragment" >
         <argument
-            android:name="review"
-            app:argType="com.example.ratemovie.domain.entities.Review"
-            app:nullable="true"
-            android:defaultValue="@null" />
-        <argument
             android:name="movie"
             app:argType="com.example.ratemovie.domain.entities.Movie" />
     </fragment>

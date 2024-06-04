@@ -13,6 +13,8 @@
     <string name="invalid_email_error">Неверно введена почта</string>
     <string name="unable_download_liked_movies">Не удалось загрузить понрафившиеся фильмы</string>
     <string name="unable_download_reviewed_movies">Не удалось загрузить оцененные фильмы</string>
+    <string name="unable_download_reviews">Не удалось загрузить отзывы</string>
+    <string name="request_failed">Не удалось выполнить запрос</string>
     <!-- Toast Errors -->
 
     <!-- Login -->

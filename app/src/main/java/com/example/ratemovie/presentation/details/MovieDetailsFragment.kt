@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
@@ -11,7 +12,6 @@ import androidx.navigation.fragment.navArgs
 import coil.load
 import com.example.ratemovie.R
 import com.example.ratemovie.domain.entities.Movie
-import com.example.ratemovie.domain.entities.Review
 import com.example.ratemovie.databinding.MovieDetailsFragmentBinding
 import com.example.ratemovie.domain.remote.RemoteResult
 import com.example.ratemovie.domain.utils.Globals.User
@@ -46,12 +46,11 @@ class MovieDetailsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.updateData()
-
         setupMovieInfo()
         setupRecyclerView()
         setupOnClickListeners()
-        observeViewModel()
+        observeLiveData()
+        checkUserLeftReview()
     }
 
     private fun setupMovieInfo() {
@@ -66,17 +65,21 @@ class MovieDetailsFragment : Fragment() {
         }
     }
 
-    private fun setupOnClickListeners() {
-        val movie = args.movie
+    private fun checkUserLeftReview() {
+        val image = if (viewModel.isReviewed == true) R.drawable.ic_edit_24 else R.drawable.ic_add_24
+        binding.ibEditReview.setImageResource(image)
+    }
 
-        binding.ibFavorite.setOnClickListener { viewModel.onFavoriteButtonClicked(movie.id) }
+    private fun setupOnClickListeners() {
+        binding.ibFavorite.setOnClickListener { viewModel.onFavoriteButtonClicked() }
+        binding.ibEditReview.setOnClickListener { showReviewFragment(args.movie) }
     }
 
     private fun setupRecyclerView() {
         binding.rvReviews.adapter = reviewsAdapter
     }
 
-    private fun observeViewModel() {
+    private fun observeLiveData() {
         User.observe(viewLifecycleOwner) { user ->
             val visibility = if (user == null) View.GONE else View.VISIBLE
 
@@ -88,62 +91,53 @@ class MovieDetailsFragment : Fragment() {
 
         viewModel.reviews.observe(viewLifecycleOwner) { result ->
             when(result) {
-                RemoteResult.Loading -> { }
+                RemoteResult.Loading -> showLoader()
 
                 is RemoteResult.Success -> {
-                    val reviews = result.data
+                    closeLoader()
 
-                    with(binding) {
-                        if (reviews.isEmpty()) {
-                            tvReviewsCount.text = getString(R.string.no_reviews)
-                            tvReviews.visibility = View.GONE
-                        } else {
-                            reviewsAdapter.submitList(reviews)
-                            tvReviewsCount.text = getString(R.string.reviewsCount, reviews.size)
-                            tvReviews.visibility = View.VISIBLE
+                    if (result.data != null) {
+                        val reviews = result.data
+
+                        with(binding) {
+                            if (reviews.isEmpty()) {
+                                tvReviewsCount.text = getString(R.string.no_reviews)
+                                tvReviews.visibility = View.GONE
+                                rvReviews.visibility = View.GONE
+                            } else {
+                                reviewsAdapter.submitList(reviews)
+                                tvReviewsCount.text = getString(R.string.reviewsCount, reviews.size)
+                                tvReviews.visibility = View.VISIBLE
+                                rvReviews.visibility = View.VISIBLE
+                            }
                         }
                     }
                 }
 
-                is RemoteResult.Error -> { }
+                is RemoteResult.Error -> {
+                    closeLoader()
+                    showToast(getString(R.string.unable_download_reviews))
+                }
             }
         }
 
-        viewModel.userReview.observe(viewLifecycleOwner) { result ->
+        viewModel.isFavorite.observe(viewLifecycleOwner) { result ->
             when (result) {
-                RemoteResult.Loading -> { }
+                RemoteResult.Loading -> showLoader()
 
                 is RemoteResult.Success -> {
-                    val review = result.data
-                    val movie = args.movie
+                    closeLoader()
 
-                    binding.ibEditReview.setOnClickListener {
-                        showReviewFragment(
-                            review = review,
-                            movie = movie
-                        )
-                    }
-
-                    if (review != null) {
-                        binding.ibEditReview.setImageResource(R.drawable.ic_edit_24)
-                    } else {
-                        binding.ibEditReview.setImageResource(R.drawable.ic_add_24)
+                    if (result.data != null) {
+                        val image = if (result.data) R.drawable.ic_favorite_filled_24 else R.drawable.ic_favorite_24
+                        binding.ibFavorite.setImageResource(image)
                     }
                 }
 
-                is RemoteResult.Error -> { }
-            }
-        }
-
-        viewModel.updateDataResult.observe(viewLifecycleOwner) {
-            if (it) showLoader() else closeLoader()
-        }
-
-        viewModel.isFavorite.observe(viewLifecycleOwner) { movieIsFavorite ->
-            if (movieIsFavorite) {
-                binding.ibFavorite.setImageResource(R.drawable.ic_favorite_filled_24)
-            } else {
-                binding.ibFavorite.setImageResource(R.drawable.ic_favorite_24)
+                is RemoteResult.Error -> {
+                    closeLoader()
+                    showToast(getString(R.string.request_failed))
+                }
             }
         }
     }
@@ -156,11 +150,15 @@ class MovieDetailsFragment : Fragment() {
         if (loader.isAdded) loader.dismiss()
     }
 
-    private fun showReviewFragment(review: Review?, movie: Movie) {
+    private fun showReviewFragment(movie: Movie) {
         val action =
-            MovieDetailsFragmentDirections.actionMovieDetailsFragmentToReviewFragment(movie, review)
+            MovieDetailsFragmentDirections.actionMovieDetailsFragmentToReviewFragment(movie)
 
         findNavController().navigate(action)
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {
