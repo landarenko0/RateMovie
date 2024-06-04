@@ -1,10 +1,12 @@
-package com.example.ratemovie.presentation.adapters
+package com.example.ratemovie.presentation.recyclerview.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.databinding.SearchMovieBinding
+import com.example.ratemovie.presentation.recyclerview.viewholders.SearchMovieViewHolder
+import com.example.ratemovie.presentation.recyclerview.diffcallback.MovieDiffCallback
 
 class SearchMoviesAdapter : ListAdapter<Movie, SearchMovieViewHolder>(MovieDiffCallback()) {
 

@@ -16,7 +16,7 @@ import com.example.ratemovie.databinding.MovieDetailsFragmentBinding
 import com.example.ratemovie.domain.remote.RemoteResult
 import com.example.ratemovie.domain.utils.Globals.User
 import com.example.ratemovie.presentation.loader.LoaderDialogFragment
-import com.example.ratemovie.presentation.adapters.ReviewsAdapter
+import com.example.ratemovie.presentation.recyclerview.adapters.ReviewsAdapter
 
 class MovieDetailsFragment : Fragment() {
 

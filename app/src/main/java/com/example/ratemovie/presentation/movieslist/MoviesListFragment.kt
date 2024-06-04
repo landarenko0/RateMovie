@@ -11,7 +11,7 @@ import com.example.ratemovie.R
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.databinding.MoviesListFragmentBinding
 import com.example.ratemovie.domain.remote.RemoteResult
-import com.example.ratemovie.presentation.adapters.MoviesAdapter
+import com.example.ratemovie.presentation.recyclerview.adapters.MoviesAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

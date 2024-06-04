@@ -12,7 +12,7 @@ import com.example.ratemovie.R
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.databinding.SearchFragmentBinding
 import com.example.ratemovie.domain.remote.RemoteResult
-import com.example.ratemovie.presentation.adapters.SearchMoviesAdapter
+import com.example.ratemovie.presentation.recyclerview.adapters.SearchMoviesAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

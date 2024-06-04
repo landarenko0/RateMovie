@@ -1,4 +1,4 @@
-package com.example.ratemovie.presentation.adapters
+package com.example.ratemovie.presentation.recyclerview.viewholders
 
 import androidx.recyclerview.widget.RecyclerView
 import coil.load

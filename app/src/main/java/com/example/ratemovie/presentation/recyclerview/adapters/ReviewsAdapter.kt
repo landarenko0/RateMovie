@@ -1,10 +1,12 @@
-package com.example.ratemovie.presentation.adapters
+package com.example.ratemovie.presentation.recyclerview.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.example.ratemovie.domain.entities.Review
 import com.example.ratemovie.databinding.ReviewBinding
+import com.example.ratemovie.presentation.recyclerview.viewholders.ReviewViewHolder
+import com.example.ratemovie.presentation.recyclerview.diffcallback.ReviewDiffCallback
 
 class ReviewsAdapter : ListAdapter<Review, ReviewViewHolder>(ReviewDiffCallback()) {
 

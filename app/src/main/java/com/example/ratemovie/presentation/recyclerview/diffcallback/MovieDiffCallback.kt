@@ -1,4 +1,4 @@
-package com.example.ratemovie.presentation.adapters
+package com.example.ratemovie.presentation.recyclerview.diffcallback
 
 import androidx.recyclerview.widget.DiffUtil
 import com.example.ratemovie.domain.entities.Movie

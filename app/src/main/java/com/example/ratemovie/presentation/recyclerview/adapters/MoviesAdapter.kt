@@ -1,10 +1,12 @@
-package com.example.ratemovie.presentation.adapters
+package com.example.ratemovie.presentation.recyclerview.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.example.ratemovie.domain.entities.Movie
 import com.example.ratemovie.databinding.MovieBinding
+import com.example.ratemovie.presentation.recyclerview.viewholders.MovieViewHolder
+import com.example.ratemovie.presentation.recyclerview.diffcallback.MovieDiffCallback
 
 class MoviesAdapter : ListAdapter<Movie, MovieViewHolder>(MovieDiffCallback()) {
 
