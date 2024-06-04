@@ -31,10 +31,6 @@ class MovieDetailsViewModel @AssistedInject constructor(
     private val _isFavorite = MutableLiveData<RemoteResult<Boolean?>>(RemoteResult.Success(null))
     val isFavorite: LiveData<RemoteResult<Boolean?>> = _isFavorite
 
-    init {
-        updateData()
-    }
-
     private suspend fun getMovieReviews() {
         getMovieReviewsUseCase(movieId).collect {
             _reviews.value = it

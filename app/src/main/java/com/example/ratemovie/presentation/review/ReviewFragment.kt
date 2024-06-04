@@ -33,8 +33,6 @@ class ReviewFragment : Fragment() {
         factory.build(args.movie.id)
     }
 
-    private val movieDetailsViewModel: MovieDetailsViewModel by hiltNavGraphViewModels(R.id.movieDetailsFragment)
-
     private val reviewText get() = binding.etReviewText.text.toString()
     private val grade get() = binding.rbRating.rating.toInt()
 
@@ -110,7 +108,6 @@ class ReviewFragment : Fragment() {
                     if (result.data != null) {
                         closeLoader()
                         closeFragment()
-                        movieDetailsViewModel.updateData()
                     }
                 }
 
