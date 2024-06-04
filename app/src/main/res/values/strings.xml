@@ -60,6 +60,7 @@
     <string name="review_hint">Опишите свои впечатления</string>
     <string name="save_review">Сохранить</string>
     <string name="delete_review">Удалить отзыв</string>
+    <string name="symbols_left">Доступное количество символов: %1$d</string>
     <!-- Review -->
 
     <!-- Bottom Navigation Menu -->
