@@ -17,8 +17,8 @@ class RegistrationViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase
 ) : ViewModel() {
 
-    private val _registrationResult = MutableLiveData<RemoteResult<RegistrationResult>>()
-    val registrationResult: LiveData<RemoteResult<RegistrationResult>> = _registrationResult
+    private val _registrationResult = MutableLiveData<RemoteResult<RegistrationResult?>>()
+    val registrationResult: LiveData<RemoteResult<RegistrationResult?>> = _registrationResult
 
     fun signUp(username: String, email: String, password: String) {
         viewModelScope.launch {
@@ -32,5 +32,9 @@ class RegistrationViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun resetState() {
+        _registrationResult.value = RemoteResult.Success(null)
     }
 }

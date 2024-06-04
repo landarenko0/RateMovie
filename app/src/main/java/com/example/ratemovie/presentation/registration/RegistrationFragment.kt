@@ -57,21 +57,24 @@ class RegistrationFragment : Fragment() {
             when (result) {
                 is RemoteResult.Loading -> showLoader()
                 is RemoteResult.Success -> {
-                    closeLoader()
-                    closeFragment()
+                    if (result.data != null) {
+                        closeLoader()
+                        closeFragment()
+                    }
                 }
 
                 is RemoteResult.Error -> {
+                    viewModel.resetState()
                     closeLoader()
 
                     when (result.message) {
-                        RegistrationResult.Error.EMAIL_COLLISION -> showMessage(R.string.email_collision_error)
-                        RegistrationResult.Error.EMPTY_FIELDS -> showMessage(R.string.empty_fields_error)
-                        RegistrationResult.Error.INVALID_CREDENTIALS -> showMessage(R.string.invalid_email_error)
-                        RegistrationResult.Error.INVALID_SYMBOLS -> showMessage(R.string.invalid_symbols_error)
-                        RegistrationResult.Error.USERNAME_COLLISION -> showMessage(R.string.username_collision_error)
-                        RegistrationResult.Error.WEAK_PASSWORD -> showMessage(R.string.weak_password_error)
-                        RegistrationResult.Error.DEFAULT -> showMessage(R.string.default_error)
+                        RegistrationResult.Error.EMAIL_COLLISION -> showToast(R.string.email_collision_error)
+                        RegistrationResult.Error.EMPTY_FIELDS -> showToast(R.string.empty_fields_error)
+                        RegistrationResult.Error.INVALID_CREDENTIALS -> showToast(R.string.invalid_email_error)
+                        RegistrationResult.Error.INVALID_SYMBOLS -> showToast(R.string.invalid_symbols_error)
+                        RegistrationResult.Error.USERNAME_COLLISION -> showToast(R.string.username_collision_error)
+                        RegistrationResult.Error.WEAK_PASSWORD -> showToast(R.string.weak_password_error)
+                        RegistrationResult.Error.DEFAULT -> showToast(R.string.default_error)
                     }
                 }
             }
@@ -86,7 +89,7 @@ class RegistrationFragment : Fragment() {
         if (loader.isAdded) loader.dismiss()
     }
 
-    private fun showMessage(resId: Int) = Toast.makeText(context, resId, Toast.LENGTH_SHORT).show()
+    private fun showToast(resId: Int) = Toast.makeText(context, resId, Toast.LENGTH_SHORT).show()
 
     private fun closeFragment() {
         findNavController().popBackStack(R.id.navigation_account, inclusive = false)
