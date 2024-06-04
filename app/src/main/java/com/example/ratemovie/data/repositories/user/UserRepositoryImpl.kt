@@ -41,6 +41,8 @@ class UserRepositoryImpl : UserRepository {
                 return@flow
             }
 
+            emit(RemoteResult.Loading)
+
             try {
                 FirebaseAuth
                     .getInstance()
@@ -88,6 +90,8 @@ class UserRepositoryImpl : UserRepository {
             emit(RemoteResult.Error(RegistrationResult.Error.EMPTY_FIELDS))
             return@flow
         }
+
+        emit(RemoteResult.Loading)
 
         try {
             val result = FirebaseAuth
