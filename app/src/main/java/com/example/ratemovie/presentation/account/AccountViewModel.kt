@@ -20,11 +20,11 @@ class AccountViewModel @Inject constructor(
 
     private val _likedMovies =
         MutableLiveData<RemoteResult<List<Movie>?>>(RemoteResult.Success(null))
-    val likedMovies: LiveData<RemoteResult<List<Movie>?>> get() = _likedMovies
+    val likedMovies: LiveData<RemoteResult<List<Movie>?>> = _likedMovies
 
     private val _reviewedMovies =
         MutableLiveData<RemoteResult<List<Movie>?>>(RemoteResult.Success(null))
-    val reviewedMovies: LiveData<RemoteResult<List<Movie>?>> get() = _reviewedMovies
+    val reviewedMovies: LiveData<RemoteResult<List<Movie>?>> = _reviewedMovies
 
     fun getUserLikedMovies(moviesIds: List<String>) = getMovies(moviesIds, _likedMovies)
 
