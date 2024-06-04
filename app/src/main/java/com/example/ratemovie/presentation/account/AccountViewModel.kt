@@ -18,24 +18,25 @@ class AccountViewModel @Inject constructor(
     private val signOutUseCase: SignOutUseCase
 ) : ViewModel() {
 
-    private val _likedMovies = MutableLiveData<RemoteResult<List<Movie>?>>()
+    private val _likedMovies =
+        MutableLiveData<RemoteResult<List<Movie>?>>(RemoteResult.Success(null))
     val likedMovies: LiveData<RemoteResult<List<Movie>?>> get() = _likedMovies
 
-    private val _reviewedMovies = MutableLiveData<RemoteResult<List<Movie>?>>()
+    private val _reviewedMovies =
+        MutableLiveData<RemoteResult<List<Movie>?>>(RemoteResult.Success(null))
     val reviewedMovies: LiveData<RemoteResult<List<Movie>?>> get() = _reviewedMovies
 
-    fun getUserLikedMovies(moviesIds: List<String>) {
-        viewModelScope.launch {
-            getMoviesByIdsUseCase(moviesIds).collect {
-                _likedMovies.value = it
-            }
-        }
-    }
+    fun getUserLikedMovies(moviesIds: List<String>) = getMovies(moviesIds, _likedMovies)
 
-    fun getUserReviewedMovies(moviesIds: List<String>) {
+    fun getUserReviewedMovies(moviesIds: List<String>) = getMovies(moviesIds, _reviewedMovies)
+
+    private fun getMovies(
+        moviesIds: List<String>,
+        destination: MutableLiveData<RemoteResult<List<Movie>?>>
+    ) {
         viewModelScope.launch {
             getMoviesByIdsUseCase(moviesIds).collect {
-                _reviewedMovies.value = it
+                destination.value = it
             }
         }
     }

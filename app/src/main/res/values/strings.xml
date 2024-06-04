@@ -11,6 +11,8 @@
     <string name="weak_password_error">Пароль должен содержать минимум 6 символов</string>
     <string name="invalid_symbols_error">В имени пользователя не должно быть символов: . # $ [ ]</string>
     <string name="invalid_email_error">Неверно введена почта</string>
+    <string name="unable_download_liked_movies">Не удалось загрузить понрафившиеся фильмы</string>
+    <string name="unable_download_reviewed_movies">Не удалось загрузить оцененные фильмы</string>
     <!-- Toast Errors -->
 
     <!-- Login -->

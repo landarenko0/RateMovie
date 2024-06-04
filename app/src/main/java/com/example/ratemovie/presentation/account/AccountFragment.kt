@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
@@ -41,7 +42,7 @@ class AccountFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupRecyclerViews()
         setupButtons()
-        observeViewModel()
+        observeLiveData()
     }
 
     private fun setupButtons() {
@@ -71,7 +72,7 @@ class AccountFragment : Fragment() {
         }
     }
 
-    private fun observeViewModel() {
+    private fun observeLiveData() {
         User.observe(viewLifecycleOwner) { user ->
             with(binding) {
                 if (user == null) {
@@ -80,67 +81,98 @@ class AccountFragment : Fragment() {
                     tvEmail.visibility = View.GONE
                     btnSignOut.visibility = View.GONE
                     btnSignIn.visibility = View.VISIBLE
+
+                    rvLikedMovies.visibility = View.GONE
+                    rvReviewedMovies.visibility = View.GONE
+
+                    tvYouLike.visibility = View.GONE
+                    tvYouLeftReview.visibility = View.GONE
                 } else {
                     tvUsername.text = user.username
                     tvEmail.text = user.email
                     tvEmail.visibility = View.VISIBLE
 
-                    viewModel.getUserLikedMovies(user.liked)
-                    viewModel.getUserReviewedMovies(user.reviewed)
-
                     btnSignOut.visibility = View.VISIBLE
                     btnSignIn.visibility = View.GONE
+
+                    val needUpdateLikedMovies =
+                        (viewModel.likedMovies.value as? RemoteResult.Success)?.let { movies ->
+                            movies.data == null || !movies.data.map { it.id.toString() }
+                                .containsAll(user.liked)
+                        }
+
+                    val needUpdateReviewedMovies =
+                        (viewModel.reviewedMovies.value as? RemoteResult.Success)?.let { movies ->
+                            movies.data == null || !movies.data.map { it.id.toString() }
+                                .containsAll(user.reviewed)
+                        }
+
+                    if (needUpdateLikedMovies == true) {
+                        viewModel.getUserLikedMovies(user.liked)
+                    }
+
+                    if (needUpdateReviewedMovies == true) {
+                        viewModel.getUserReviewedMovies(user.reviewed)
+                    }
                 }
             }
         }
 
         viewModel.likedMovies.observe(viewLifecycleOwner) { result ->
-            when(result) {
+            when (result) {
                 RemoteResult.Loading -> { }
 
                 is RemoteResult.Success -> {
-                    val movies = result.data
+                    if (result.data != null) {
+                        val movies = result.data
 
-                    with(binding) {
-                        if (!movies.isNullOrEmpty()) {
-                            tvYouLike.visibility = View.VISIBLE
-                            rvLikedMovies.visibility = View.VISIBLE
+                        with(binding) {
+                            if (movies.isNotEmpty()) {
+                                tvYouLike.visibility = View.VISIBLE
+                                rvLikedMovies.visibility = View.VISIBLE
 
-                            likedMoviesAdapter.submitList(movies)
-                        } else {
-                            tvYouLike.visibility = View.GONE
-                            rvLikedMovies.visibility = View.GONE
+                                likedMoviesAdapter.submitList(movies)
+                            } else {
+                                tvYouLike.visibility = View.GONE
+                                rvLikedMovies.visibility = View.GONE
+                            }
                         }
                     }
                 }
 
-                is RemoteResult.Error -> { }
+                is RemoteResult.Error -> showToast(getString(R.string.unable_download_liked_movies))
             }
         }
 
         viewModel.reviewedMovies.observe(viewLifecycleOwner) { result ->
-            when(result) {
+            when (result) {
                 RemoteResult.Loading -> { }
 
                 is RemoteResult.Success -> {
-                    val movies = result.data
+                    if (result.data != null) {
+                        val movies = result.data
 
-                    with(binding) {
-                        if (!movies.isNullOrEmpty()) {
-                            tvYouLeftReview.visibility = View.VISIBLE
-                            rvReviewedMovies.visibility = View.VISIBLE
+                        with(binding) {
+                            if (movies.isNotEmpty()) {
+                                tvYouLeftReview.visibility = View.VISIBLE
+                                rvReviewedMovies.visibility = View.VISIBLE
 
-                            reviewedMoviesAdapter.submitList(movies)
-                        } else {
-                            tvYouLeftReview.visibility = View.GONE
-                            rvReviewedMovies.visibility = View.GONE
+                                reviewedMoviesAdapter.submitList(movies)
+                            } else {
+                                tvYouLeftReview.visibility = View.GONE
+                                rvReviewedMovies.visibility = View.GONE
+                            }
                         }
                     }
                 }
 
-                is RemoteResult.Error -> TODO()
+                is RemoteResult.Error -> showToast(getString(R.string.unable_download_reviewed_movies))
             }
         }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
     private fun showMovieDetailsFragment(movie: Movie) {
