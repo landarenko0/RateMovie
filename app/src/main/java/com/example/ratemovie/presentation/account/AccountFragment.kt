@@ -97,14 +97,12 @@ class AccountFragment : Fragment() {
 
                     val needUpdateLikedMovies =
                         (viewModel.likedMovies.value as? RemoteResult.Success)?.let { movies ->
-                            movies.data == null || !movies.data.map { it.id.toString() }
-                                .containsAll(user.liked)
+                            movies.data == null || movies.data.map { it.id.toString() }.sorted() != user.liked.sorted()
                         }
 
                     val needUpdateReviewedMovies =
                         (viewModel.reviewedMovies.value as? RemoteResult.Success)?.let { movies ->
-                            movies.data == null || !movies.data.map { it.id.toString() }
-                                .containsAll(user.reviewed)
+                            movies.data == null || movies.data.map { it.id.toString() }.sorted() != user.reviewed.sorted()
                         }
 
                     if (needUpdateLikedMovies == true) {
