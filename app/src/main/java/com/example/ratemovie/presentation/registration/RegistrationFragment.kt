@@ -45,7 +45,7 @@ class RegistrationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setOnClickListener()
-        observeViewModel()
+        observeLiveData()
     }
 
     private fun setOnClickListener() {
@@ -54,7 +54,7 @@ class RegistrationFragment : Fragment() {
         }
     }
 
-    private fun observeViewModel() {
+    private fun observeLiveData() {
         viewModel.registrationResult.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is RemoteResult.Loading -> showLoader()

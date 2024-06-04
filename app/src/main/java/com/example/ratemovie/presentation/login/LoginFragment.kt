@@ -44,10 +44,10 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setOnClickListeners()
-        observeViewModel()
+        observeLiveData()
     }
 
-    private fun observeViewModel() {
+    private fun observeLiveData() {
         viewModel.loginResult.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is RemoteResult.Loading -> showLoader()
