@@ -21,11 +21,11 @@ interface UserRepository {
         password: String
     ): Flow<RemoteResult<RegistrationResult>>
 
-    suspend fun addMovieToFavorites(userId: String, movieId: Int): Flow<RemoteResult<Unit>>
+    suspend fun addMovieToFavorites(userId: String, movieId: Int): Flow<RemoteResult<Boolean>>
 
-    suspend fun deleteMovieFromFavorites(userId: String, movieId: Int): Flow<RemoteResult<Unit>>
+    suspend fun deleteMovieFromFavorites(userId: String, movieId: Int): Flow<RemoteResult<Boolean>>
 
-    suspend fun addReview(review: Review, userId: String, movieId: Int): Flow<RemoteResult<Unit>>
+    suspend fun addReview(review: Review, userId: String, movieId: Int): Flow<RemoteResult<Boolean>>
 
-    suspend fun deleteReview(review: Review, userId: String, movieId: Int): Flow<RemoteResult<Unit>>
+    suspend fun deleteReview(review: Review, userId: String, movieId: Int): Flow<RemoteResult<Boolean>>
 }

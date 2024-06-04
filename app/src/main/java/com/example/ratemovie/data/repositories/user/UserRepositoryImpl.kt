@@ -150,7 +150,7 @@ class UserRepositoryImpl : UserRepository {
             .setValue(movieId.toString())
             .await()
 
-        emit(RemoteResult.Success(Unit))
+        emit(RemoteResult.Success(true))
     }.flowOn(Dispatchers.IO)
 
     override suspend fun deleteMovieFromFavorites(userId: String, movieId: Int) = flow {
@@ -174,7 +174,7 @@ class UserRepositoryImpl : UserRepository {
             .setValue(likedMovies)
             .await()
 
-        emit(RemoteResult.Success(Unit))
+        emit(RemoteResult.Success(false))
     }.flowOn(Dispatchers.IO)
 
     override suspend fun addReview(review: Review, userId: String, movieId: Int) = flow {
@@ -183,7 +183,7 @@ class UserRepositoryImpl : UserRepository {
         addReviewToMovie(review, userId, movieId)
         addMovieToUser(userId, movieId)
 
-        emit(RemoteResult.Success(Unit))
+        emit(RemoteResult.Success(true))
     }.flowOn(Dispatchers.IO)
 
     override suspend fun deleteReview(review: Review, userId: String, movieId: Int) = flow {
@@ -192,7 +192,7 @@ class UserRepositoryImpl : UserRepository {
         deleteUserReview(userId, movieId)
         deleteMovieFromUser(userId, movieId)
 
-        emit(RemoteResult.Success(Unit))
+        emit(RemoteResult.Success(true))
     }.flowOn(Dispatchers.IO)
 
     private suspend fun addMovieToUser(userId: String, movieId: Int) {
