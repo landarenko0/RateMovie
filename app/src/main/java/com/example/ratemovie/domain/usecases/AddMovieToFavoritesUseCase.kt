@@ -8,7 +8,5 @@ class AddMovieToFavoritesUseCase @Inject constructor(private val repository: Use
     suspend operator fun invoke(
         userId: String,
         movieId: Int
-    ) {
-        repository.addMovieToFavorites(userId, movieId)
-    }
+    ) = repository.addMovieToFavorites(userId, movieId)
 }

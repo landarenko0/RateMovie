@@ -8,7 +8,5 @@ class DeleteMovieFromFavoritesUseCase @Inject constructor(private val repository
     suspend operator fun invoke(
         userId: String,
         movieId: Int
-    ) {
-        repository.deleteMovieFromFavorites(userId, movieId)
-    }
+    ) = repository.deleteMovieFromFavorites(userId, movieId)
 }
