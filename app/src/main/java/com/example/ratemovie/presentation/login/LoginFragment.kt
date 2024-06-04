@@ -50,17 +50,20 @@ class LoginFragment : Fragment() {
             when (result) {
                 is RemoteResult.Loading -> showLoader()
                 is RemoteResult.Success -> {
-                    closeLoader()
-                    closeFragment()
+                    if (result.data != null) {
+                        closeLoader()
+                        closeFragment()
+                    }
                 }
 
                 is RemoteResult.Error -> {
+                    viewModel.resetState()
                     closeLoader()
 
                     when (result.message) {
-                        LoginResult.Error.EMPTY_FIELDS -> showMessage(R.string.empty_fields_error)
-                        LoginResult.Error.INVALID_CREDENTIALS -> showMessage(R.string.invalid_data_error)
-                        LoginResult.Error.DEFAULT -> showMessage(R.string.default_error)
+                        LoginResult.Error.EMPTY_FIELDS -> showToast(R.string.empty_fields_error)
+                        LoginResult.Error.INVALID_CREDENTIALS -> showToast(R.string.invalid_data_error)
+                        LoginResult.Error.DEFAULT -> showToast(R.string.default_error)
                     }
                 }
             }
@@ -81,7 +84,7 @@ class LoginFragment : Fragment() {
         binding.btnRegistration.setOnClickListener { openRegisterFragment() }
     }
 
-    private fun showMessage(resId: Int) = Toast.makeText(context, resId, Toast.LENGTH_SHORT).show()
+    private fun showToast(resId: Int) = Toast.makeText(context, resId, Toast.LENGTH_SHORT).show()
 
     private fun openRegisterFragment() {
         val action = LoginFragmentDirections.actionLoginFragmentToRegistrationFragment()

@@ -17,20 +17,22 @@ class LoginViewModel @Inject constructor(
     private val signInUseCase: SignInUseCase
 ) : ViewModel() {
 
-    private val _loginResult = MutableLiveData<RemoteResult<LoginResult>>()
-    val loginResult: LiveData<RemoteResult<LoginResult>> = _loginResult
+    private val _loginResult = MutableLiveData<RemoteResult<LoginResult?>>(RemoteResult.Success(null))
+    val loginResult: LiveData<RemoteResult<LoginResult?>> = _loginResult
 
     fun signIn(email: String, password: String) {
         viewModelScope.launch {
             signInUseCase(email, password).collect {
                 _loginResult.value = it
 
-                if (it is RemoteResult.Success) {
-                    val result = it.data
-
-                    if (result is LoginResult.Success) Globals.User.value = result.user
+                if (it is RemoteResult.Success && it.data is LoginResult.Success) {
+                    Globals.User.value = it.data.user
                 }
             }
         }
+    }
+
+    fun resetState() {
+        _loginResult.value = RemoteResult.Success(null)
     }
 }
