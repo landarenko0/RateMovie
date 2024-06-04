@@ -15,7 +15,7 @@ class LoaderDialogFragment : DialogFragment() {
 
             builder.apply {
                 setView(R.layout.loader_dialog)
-                setCancelable(false)
+                isCancelable = false
             }.create()
         } ?: throw IllegalStateException("Activity cannot be null")
     }
@@ -27,6 +27,6 @@ class LoaderDialogFragment : DialogFragment() {
     }
 
     companion object {
-        private const val DIALOG_WIDTH = 225
+        private const val DIALOG_WIDTH = 210
     }
 }
