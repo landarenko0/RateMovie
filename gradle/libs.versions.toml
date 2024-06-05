@@ -1,0 +1,58 @@
+[versions]
+appcompat = "1.7.0"
+cardview = "1.0.0"
+coil = "2.5.0"
+constraintlayout = "2.1.4"
+coreKtx = "1.13.1"
+espressoCore = "3.5.1"
+firebaseBom = "33.1.0"
+hiltAndroid = "2.51.1"
+hiltCompiler = "2.51.1"
+hiltNavigationFragment = "1.2.0"
+junit = "4.13.2"
+junitVersion = "1.1.5"
+kotlinxSerializationJson = "1.6.2"
+lifecycleLivedataKtx = "2.8.1"
+material = "1.12.0"
+navigationFragmentKtx = "2.7.7"
+retrofit = "2.9.0"
+retrofit2KotlinxSerializationConverter = "1.0.0"
+kotlin = "1.9.22"
+application = "8.4.1"
+hilt = "2.51.1"
+googleServices = "4.4.2"
+serialization = "1.9.22"
+safeArgs = "2.7.7"
+
+[libraries]
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
+androidx-hilt-navigation-fragment = { module = "androidx.hilt:hilt-navigation-fragment", version.ref = "hiltNavigationFragment" }
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
+androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleLivedataKtx" }
+androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
+androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationFragmentKtx" }
+coil = { module = "io.coil-kt:coil", version.ref = "coil" }
+firebase-auth = { module = "com.google.firebase:firebase-auth" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-database = { module = "com.google.firebase:firebase-database" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltCompiler" }
+junit = { module = "junit:junit", version.ref = "junit" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverter" }
+
+[plugins]
+kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+androidApplication = { id = "com.android.application", version.ref = "application" }
+jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+daggerHiltAndroid = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+googleServices = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }
+safeArgs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "safeArgs" }
