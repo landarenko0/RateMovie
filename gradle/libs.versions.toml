@@ -1,7 +1,7 @@
 [versions]
 appcompat = "1.7.0"
 cardview = "1.0.0"
-coil = "2.5.0"
+coil = "2.6.0"
 constraintlayout = "2.1.4"
 coreKtx = "1.13.1"
 espressoCore = "3.5.1"
@@ -23,6 +23,7 @@ hilt = "2.51.1"
 googleServices = "4.4.2"
 serialization = "1.9.22"
 safeArgs = "2.7.7"
+parcelize = "2.0.0"
 
 [libraries]
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
@@ -56,3 +57,4 @@ daggerHiltAndroid = { id = "com.google.dagger.hilt.android", version.ref = "hilt
 googleServices = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }
 safeArgs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "safeArgs" }
+parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "parcelize" }
