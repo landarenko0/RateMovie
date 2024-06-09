@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
@@ -95,9 +96,13 @@ class SearchFragment : Fragment() {
                     }
                 }
 
-                is RemoteResult.Error -> { }
+                is RemoteResult.Error -> showMessage(getString(R.string.request_failed))
             }
         }
+    }
+
+    private fun showMessage(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
     private fun showMovieDetailsFragment(movie: Movie) {

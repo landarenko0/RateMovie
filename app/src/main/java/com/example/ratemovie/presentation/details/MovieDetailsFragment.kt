@@ -128,7 +128,7 @@ class MovieDetailsFragment : Fragment() {
 
         viewModel.isFavorite.observe(viewLifecycleOwner) { result ->
             when (result) {
-                RemoteResult.Loading -> showLoader()
+                RemoteResult.Loading -> { }
 
                 is RemoteResult.Success -> {
                     closeLoader()

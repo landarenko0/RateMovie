@@ -41,6 +41,8 @@ class MoviesListRepositoryImpl @Inject constructor(
 
                         emit(RemoteResult.Success(movies))
                     }
+
+                    else -> emit(RemoteResult.Error("Не удалось выполнить запрос"))
                 }
             } catch (ex: Exception) {
                 emit(RemoteResult.Error("Не удалось загрузить фильмы"))
