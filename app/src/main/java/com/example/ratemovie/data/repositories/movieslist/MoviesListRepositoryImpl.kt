@@ -35,7 +35,10 @@ class MoviesListRepositoryImpl @Inject constructor(
 
                 when {
                     response.isSuccessful && response.body() is ApiResponse -> {
-                        val movies = (response.body() as ApiResponse).movies
+                        val movies = (response.body() as ApiResponse).movies.filter {
+                            it.title != "" && it.description != "" && it.posterUrl != null && it.genres.isNotEmpty()
+                        }
+
                         emit(RemoteResult.Success(movies))
                     }
                 }
