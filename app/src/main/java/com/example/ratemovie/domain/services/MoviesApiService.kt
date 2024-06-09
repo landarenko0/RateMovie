@@ -24,7 +24,11 @@ interface MoviesApiService {
         @Query("notNullFields") notNullFields: List<String> = listOf("id", "name", "description", "poster.url", "genres.name"),
         @Query("status") status: List<String> = listOf("completed"),
         @Query("year") year: List<String> = listOf("2023-2030"),
-        @Query("rating.kp") rating: List<String> = listOf("7-10")
+        @Query("rating.kp") rating: List<String> = listOf("7-10"),
+        @Query("typeNumber") typeNumber: List<String> = listOf("!3", "!5"),
+        @Query("isSeries") isSeries: List<String> = listOf("true"),
+        @Query("genres.name") genres: List<String> = listOf("!документальный", "!игра", "!реальное ТВ"),
+        @Query("countries.name") countries: List<String> = listOf("Россия")
     ): Response<ApiResponse>
 
     @GET("v1.4/movie")
