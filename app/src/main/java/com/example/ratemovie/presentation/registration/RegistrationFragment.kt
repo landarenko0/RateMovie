@@ -22,7 +22,7 @@ class RegistrationFragment : Fragment() {
     private val binding
         get() = _binding ?: throw RuntimeException("RegistrationFragmentBinding was null")
 
-    private val viewModel: RegistrationViewModel by hiltNavGraphViewModels(R.id.accountNav)
+    private val viewModel: RegistrationViewModel by hiltNavGraphViewModels(R.id.registrationFragment)
 
     private val username get() = binding.etUsername.text.toString()
     private val email get() = binding.etEmail.text.toString()

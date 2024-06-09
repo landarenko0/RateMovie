@@ -22,7 +22,7 @@ class SearchFragment : Fragment() {
     private val binding
         get() = _binding ?: throw RuntimeException("SearchFragmentBinding was null")
 
-    private val viewModel: SearchViewModel by hiltNavGraphViewModels(R.id.searchNav)
+    private val viewModel: SearchViewModel by hiltNavGraphViewModels(R.id.searchFragment)
 
     private val moviesAdapter = SearchMoviesAdapter()
 

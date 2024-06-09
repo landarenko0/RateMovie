@@ -28,7 +28,7 @@ class ReviewFragment : Fragment() {
 
     private val args: ReviewFragmentArgs by navArgs()
 
-    private val viewModel: ReviewViewModel by hiltNavGraphViewModels(R.id.movie_details_nav) { factory: ReviewViewModel.Factory ->
+    private val viewModel: ReviewViewModel by hiltNavGraphViewModels(R.id.reviewFragment) { factory: ReviewViewModel.Factory ->
         factory.build(args.movie.id)
     }
 

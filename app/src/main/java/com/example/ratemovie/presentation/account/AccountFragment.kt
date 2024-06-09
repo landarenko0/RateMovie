@@ -23,7 +23,7 @@ class AccountFragment : Fragment() {
     private val binding
         get() = _binding ?: throw RuntimeException("AccountFragmentBinding was null")
 
-    private val viewModel: AccountViewModel by hiltNavGraphViewModels(R.id.accountNav)
+    private val viewModel: AccountViewModel by hiltNavGraphViewModels(R.id.accountFragment)
 
     private val likedMoviesAdapter = MoviesAdapter()
     private val reviewedMoviesAdapter = MoviesAdapter()
