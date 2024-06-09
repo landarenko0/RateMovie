@@ -54,6 +54,7 @@ class ReviewFragment : Fragment() {
         setMovieInfo()
         setListeners()
         observeLiveData()
+        viewModel.checkUserReview()
     }
 
     private fun setMovieInfo() {
@@ -87,10 +88,8 @@ class ReviewFragment : Fragment() {
             when (result) {
                 RemoteResult.Loading -> showLoader()
                 is RemoteResult.Success -> {
-                    if (result.data != null) {
-                        setupUserReview(result.data)
-                        closeLoader()
-                    }
+                    closeLoader()
+                    setupUserReview(result.data)
                 }
 
                 is RemoteResult.Error -> {
@@ -122,10 +121,15 @@ class ReviewFragment : Fragment() {
         }
     }
 
-    private fun setupUserReview(review: Review) {
+    private fun setupUserReview(review: Review?) {
         with(binding) {
-            rbRating.rating = review.grade.toFloat()
-            etReviewText.setText(review.text)
+            if (review == null) {
+                rbRating.rating = 0f
+                etReviewText.setText("")
+            } else {
+                rbRating.rating = review.grade.toFloat()
+                etReviewText.setText(review.text)
+            }
         }
 
         binding.btnDeleteReview.visibility = View.VISIBLE

@@ -28,28 +28,20 @@ class ReviewViewModel @AssistedInject constructor(
     private val _userReview = MutableLiveData<RemoteResult<Review?>>(RemoteResult.Success(null))
     val userReview: LiveData<RemoteResult<Review?>> = _userReview
 
-    private val _result = MutableLiveData<RemoteResult<Boolean?>>()
+    private val _result = MutableLiveData<RemoteResult<Boolean?>>(RemoteResult.Success(null))
     val result: LiveData<RemoteResult<Boolean?>> = _result
 
     private val _symbolsLeft = MutableLiveData(MAX_TEXT_LENGTH)
     val symbolsLeft: LiveData<Int> = _symbolsLeft
 
-    init {
-        checkUserReview()
-    }
-
-    private fun checkUserReview() {
+    fun checkUserReview() {
         if (User.value == null) return
 
-        val userLeftReview = movieId.toString() in User.value!!.reviewed
+        val userId = User.value!!.id
 
-        if (userLeftReview) {
-            val userId = User.value!!.id
-
-            viewModelScope.launch {
-                getUserReviewUseCase(userId, movieId).collect {
-                    _userReview.value = it
-                }
+        viewModelScope.launch {
+            getUserReviewUseCase(userId, movieId).collect {
+                _userReview.value = it
             }
         }
     }
