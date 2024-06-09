@@ -22,7 +22,7 @@ class MoviesListFragment : Fragment() {
     private val binding
         get() = _binding ?: throw RuntimeException("MoviesListFragmentBinding was null")
 
-    private val viewModel: MoviesListViewModel by hiltNavGraphViewModels(R.id.navigation_movies)
+    private val viewModel: MoviesListViewModel by hiltNavGraphViewModels(R.id.moviesListNav)
 
     private val moviesAdapter = MoviesAdapter()
 
@@ -67,8 +67,7 @@ class MoviesListFragment : Fragment() {
     }
 
     private fun showMovieDetailsFragment(movie: Movie) {
-        val action =
-            MoviesListFragmentDirections.actionMoviesListFragmentToMovieDetailsFragment(movie)
+        val action = MoviesListFragmentDirections.actionMoviesListFragmentToMovieDetailsNav(movie)
 
         findNavController().navigate(action)
     }

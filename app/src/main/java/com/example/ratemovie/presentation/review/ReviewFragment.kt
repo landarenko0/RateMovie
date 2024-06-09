@@ -16,7 +16,6 @@ import com.example.ratemovie.databinding.ReviewFragmentBinding
 import com.example.ratemovie.domain.entities.Review
 import com.example.ratemovie.domain.remote.RemoteResult
 import com.example.ratemovie.domain.utils.Globals.User
-import com.example.ratemovie.presentation.details.MovieDetailsViewModel
 import com.example.ratemovie.presentation.loader.LoaderDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,7 +28,7 @@ class ReviewFragment : Fragment() {
 
     private val args: ReviewFragmentArgs by navArgs()
 
-    private val viewModel: ReviewViewModel by hiltNavGraphViewModels(R.id.reviewFragment) { factory: ReviewViewModel.Factory ->
+    private val viewModel: ReviewViewModel by hiltNavGraphViewModels(R.id.movie_details_nav) { factory: ReviewViewModel.Factory ->
         factory.build(args.movie.id)
     }
 

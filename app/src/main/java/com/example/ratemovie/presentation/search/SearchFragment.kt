@@ -22,7 +22,7 @@ class SearchFragment : Fragment() {
     private val binding
         get() = _binding ?: throw RuntimeException("SearchFragmentBinding was null")
 
-    private val viewModel: SearchViewModel by hiltNavGraphViewModels(R.id.navigation_search)
+    private val viewModel: SearchViewModel by hiltNavGraphViewModels(R.id.searchNav)
 
     private val moviesAdapter = SearchMoviesAdapter()
 
@@ -101,7 +101,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun showMovieDetailsFragment(movie: Movie) {
-        val action = SearchFragmentDirections.actionNavigationSearchToMovieDetailsFragment(movie)
+        val action = SearchFragmentDirections.actionSearchFragmentToMovieDetailsNav(movie)
 
         findNavController().navigate(action)
     }

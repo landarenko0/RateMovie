@@ -22,7 +22,7 @@ class LoginFragment : Fragment() {
     private val binding
         get() = _binding ?: throw RuntimeException("LoginFragmentBinding was null")
 
-    private val viewModel: LoginViewModel by hiltNavGraphViewModels(R.id.loginFragment)
+    private val viewModel: LoginViewModel by hiltNavGraphViewModels(R.id.accountNav)
 
     private val email get() = binding.etEmail.text.toString()
     private val password get() = binding.etPassword.text.toString()

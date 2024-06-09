@@ -26,7 +26,7 @@ class MovieDetailsFragment : Fragment() {
 
     private val args: MovieDetailsFragmentArgs by navArgs()
 
-    private val viewModel: MovieDetailsViewModel by hiltNavGraphViewModels(R.id.movieDetailsFragment) { factory: MovieDetailsViewModel.Factory ->
+    private val viewModel: MovieDetailsViewModel by hiltNavGraphViewModels(R.id.movie_details_nav) { factory: MovieDetailsViewModel.Factory ->
         factory.build(args.movie.id)
     }
 
@@ -156,8 +156,7 @@ class MovieDetailsFragment : Fragment() {
     }
 
     private fun showReviewFragment(movie: Movie) {
-        val action =
-            MovieDetailsFragmentDirections.actionMovieDetailsFragmentToReviewFragment(movie)
+        val action = MovieDetailsFragmentDirections.actionMovieDetailsFragmentToReviewFragment(movie)
 
         findNavController().navigate(action)
     }

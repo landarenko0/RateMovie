@@ -22,7 +22,7 @@ class RegistrationFragment : Fragment() {
     private val binding
         get() = _binding ?: throw RuntimeException("RegistrationFragmentBinding was null")
 
-    private val viewModel: RegistrationViewModel by hiltNavGraphViewModels(R.id.registrationFragment)
+    private val viewModel: RegistrationViewModel by hiltNavGraphViewModels(R.id.accountNav)
 
     private val username get() = binding.etUsername.text.toString()
     private val email get() = binding.etEmail.text.toString()
@@ -94,7 +94,7 @@ class RegistrationFragment : Fragment() {
     private fun showToast(resId: Int) = Toast.makeText(context, resId, Toast.LENGTH_SHORT).show()
 
     private fun closeFragment() {
-        findNavController().popBackStack(R.id.navigation_account, inclusive = false)
+        findNavController().popBackStack(R.id.accountFragment, inclusive = false)
     }
 
     override fun onDestroyView() {

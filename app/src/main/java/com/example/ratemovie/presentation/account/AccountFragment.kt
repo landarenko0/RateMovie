@@ -23,7 +23,7 @@ class AccountFragment : Fragment() {
     private val binding
         get() = _binding ?: throw RuntimeException("AccountFragmentBinding was null")
 
-    private val viewModel: AccountViewModel by hiltNavGraphViewModels(R.id.navigation_account)
+    private val viewModel: AccountViewModel by hiltNavGraphViewModels(R.id.accountNav)
 
     private val likedMoviesAdapter = MoviesAdapter()
     private val reviewedMoviesAdapter = MoviesAdapter()
@@ -176,13 +176,13 @@ class AccountFragment : Fragment() {
     }
 
     private fun showMovieDetailsFragment(movie: Movie) {
-        val action = AccountFragmentDirections.actionNavigationAccountToMovieDetailsFragment(movie)
+        val action = AccountFragmentDirections.actionAccountFragmentToMovieDetailsNav(movie)
 
         findNavController().navigate(action)
     }
 
     private fun showLoginFragment() {
-        val action = AccountFragmentDirections.actionNavigationAccountToLoginFragment()
+        val action = AccountFragmentDirections.actionAccountFragmentToLoginFragment()
 
         findNavController().navigate(action)
     }
