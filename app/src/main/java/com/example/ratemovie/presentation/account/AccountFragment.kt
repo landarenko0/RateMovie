@@ -97,21 +97,8 @@ class AccountFragment : Fragment() {
                     btnSignOut.visibility = View.VISIBLE
                     btnSignIn.visibility = View.GONE
 
-                    if (user.liked.isEmpty()) {
-                        likedMoviesAdapter.submitList(emptyList())
-                        binding.rvLikedMovies.visibility = View.GONE
-                        binding.tvYouLike.visibility = View.GONE
-                    } else {
-                        viewModel.getUserLikedMovies(user.liked)
-                    }
-
-                    if (user.reviewed.isEmpty()) {
-                        reviewedMoviesAdapter.submitList(emptyList())
-                        binding.rvReviewedMovies.visibility = View.GONE
-                        binding.tvYouLeftReview.visibility = View.GONE
-                    } else {
-                        viewModel.getUserReviewedMovies(user.reviewed)
-                    }
+                    viewModel.getUserLikedMovies(user.liked)
+                    viewModel.getUserReviewedMovies(user.reviewed)
                 }
             }
         }

@@ -131,8 +131,6 @@ class MovieDetailsFragment : Fragment() {
                 RemoteResult.Loading -> { }
 
                 is RemoteResult.Success -> {
-                    closeLoader()
-
                     if (result.data != null) {
                         val image = if (result.data) R.drawable.ic_favorite_filled_24 else R.drawable.ic_favorite_24
                         binding.ibFavorite.setImageResource(image)
@@ -140,7 +138,6 @@ class MovieDetailsFragment : Fragment() {
                 }
 
                 is RemoteResult.Error -> {
-                    closeLoader()
                     showToast(getString(R.string.request_failed))
                 }
             }

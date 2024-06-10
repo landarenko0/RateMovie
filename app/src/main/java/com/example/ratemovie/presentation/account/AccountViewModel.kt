@@ -26,9 +26,21 @@ class AccountViewModel @Inject constructor(
         MutableLiveData<RemoteResult<List<Movie>?>>(RemoteResult.Success(null))
     val reviewedMovies: LiveData<RemoteResult<List<Movie>?>> = _reviewedMovies
 
-    fun getUserLikedMovies(moviesIds: List<String>) = getMovies(moviesIds, _likedMovies)
+    fun getUserLikedMovies(moviesIds: List<String>) {
+        if (moviesIds.isEmpty()) {
+            _likedMovies.value = RemoteResult.Success(emptyList())
+        } else {
+            getMovies(moviesIds, _likedMovies)
+        }
+    }
 
-    fun getUserReviewedMovies(moviesIds: List<String>) = getMovies(moviesIds, _reviewedMovies)
+    fun getUserReviewedMovies(moviesIds: List<String>) {
+        if (moviesIds.isEmpty()) {
+            _reviewedMovies.value = RemoteResult.Success(emptyList())
+        } else {
+            getMovies(moviesIds, _reviewedMovies)
+        }
+    }
 
     private fun getMovies(
         moviesIds: List<String>,
